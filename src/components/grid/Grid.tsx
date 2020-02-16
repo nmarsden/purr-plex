@@ -61,8 +61,19 @@ function useWindowDimensions() {
 }
 
 function useCellSize() {
-  const { height, width } = useWindowDimensions();
-  return Math.floor( Math.min( height / 9, width / 9) );
+  const { width, height } = useWindowDimensions();
+
+  const gridSideMargin = width / 18;
+  const gridTopMargin = height / 18;
+  const gridBottomMargin = height / 3;
+
+  const gridWidth =  width - (gridSideMargin * 2);
+  const gridHeight =  height - (gridTopMargin + gridBottomMargin);
+
+  const cellWidth = Math.floor( gridWidth / 9 );
+  const cellHeight = Math.floor( gridHeight / 9 );
+
+  return Math.min( cellWidth, cellHeight );
 }
 
 export default Grid;
