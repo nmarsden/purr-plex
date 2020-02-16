@@ -1,9 +1,17 @@
-.container {
+$grid-line-colour: #929292;
+
+.gridContainer {
   display: flex;
   flex-direction:column;
   justify-content: center;
   align-items: center;
-  border: 1px solid black;
+}
+
+.grid {
+  display: flex;
+  flex-direction:column;
+  border-left: thin solid $grid-line-colour;
+  border-top: thin solid $grid-line-colour;
 }
 
 .row {
@@ -11,7 +19,8 @@
 }
 
 @mixin grid-cell($background-color) {
-  border: 1px solid black;
+  border-right: thin solid $grid-line-colour;
+  border-bottom: thin solid $grid-line-colour;
   background-color: $background-color;
 }
 
@@ -19,5 +28,5 @@
   @include grid-cell(rgb(255,255,255));
 }
 .shadedCell {
-  @include grid-cell(rgb(129, 192, 223));
+  @include grid-cell(rgb(230, 252, 255));
 }

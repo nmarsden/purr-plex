@@ -1,12 +1,16 @@
 import React from 'react';
-import styles from './App.module.scss';
 import Grid from './components/grid/Grid';
+import GameDimensionsProvider from './components/gameDimensionsProvider/GameDimensionsProvider';
+import GameHeader from './components/gameHeader/GameHeader';
 
 function App() {
   return (
-    <div className={styles.App}>
-      <Grid />
-    </div>
+    <GameDimensionsProvider>
+      <div>
+        <GameHeader />
+        <Grid />
+      </div>
+    </GameDimensionsProvider>
   );
 }
 

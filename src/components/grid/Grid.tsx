@@ -1,5 +1,6 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode } from 'react';
 import styles from './Grid.module.scss';
+import { useGameDimensions } from '../gameDimensionsProvider/GameDimensionsProvider';
 
 function Grid() {
   const cellTypes = [
@@ -13,7 +14,8 @@ function Grid() {
     'OOOXXXOOO',
     'OOOXXXOOO'
   ];
-  const cellSize = useCellSize();
+  const gameDimensions = useGameDimensions();
+  const cellSize = gameDimensions.cellSize;
   const cellStyles = {
     width: `${cellSize}px`,
     height: `${cellSize}px`
@@ -31,49 +33,12 @@ function Grid() {
   } );
 
   return (
-    <div className={styles.container}>
-      {rows}
+    <div className={styles.gridContainer}>
+      <div className={styles.grid}>
+        {rows}
+      </div>
     </div>
   );
-}
-
-function getWindowDimensions() {
-  const { clientWidth: width, clientHeight: height } = window.document.documentElement;
-  return {
-    width,
-    height
-  };
-}
-
-function useWindowDimensions() {
-  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
-
-  useEffect(() => {
-    function handleResize() {
-      setWindowDimensions(getWindowDimensions());
-    }
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  return windowDimensions;
-}
-
-function useCellSize() {
-  const { width, height } = useWindowDimensions();
-
-  const gridSideMargin = width / 18;
-  const gridTopMargin = height / 18;
-  const gridBottomMargin = height / 3;
-
-  const gridWidth =  width - (gridSideMargin * 2);
-  const gridHeight =  height - (gridTopMargin + gridBottomMargin);
-
-  const cellWidth = Math.floor( gridWidth / 9 );
-  const cellHeight = Math.floor( gridHeight / 9 );
-
-  return Math.min( cellWidth, cellHeight );
 }
 
 export default Grid;
