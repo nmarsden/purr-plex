@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+  flex-direction:column;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+  border: 1px solid black;
+}
+
+.row {
+  display: flex;
+}
+
+@mixin grid-cell($background-color) {
+  width: calc((1 / 9 * 100vw) - 2vw);
+  height: calc((1 / 9 * 100vw) - 2vw);
+  border: 1px solid black;
+  background-color: $background-color;
+}
+
+.cell {
+  @include grid-cell(rgb(255,255,255));
+}
+.shadedCell {
+  @include grid-cell(rgb(129, 192, 223));
+}
