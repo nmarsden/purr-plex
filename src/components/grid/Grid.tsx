@@ -1,8 +1,8 @@
-import React, { ReactNode } from 'react';
+import React, { FunctionComponent, ReactNode } from 'react';
 import styles from './Grid.module.scss';
 import { useGameDimensions } from '../gameDimensionsProvider/GameDimensionsProvider';
 
-function Grid() {
+const Grid: FunctionComponent<any> = ({ children }) => {
   const cellTypes = [
     'OOOXXXOOO',
     'OOOXXXOOO',
@@ -36,9 +36,10 @@ function Grid() {
     <div className={styles.gridContainer}>
       <div className={styles.grid}>
         {rows}
+        { children }
       </div>
     </div>
   );
-}
+};
 
 export default Grid;

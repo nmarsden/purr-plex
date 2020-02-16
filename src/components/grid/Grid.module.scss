@@ -12,6 +12,7 @@ $grid-line-colour: #929292;
   flex-direction:column;
   border-left: thin solid $grid-line-colour;
   border-top: thin solid $grid-line-colour;
+  position: relative;
 }
 
 .row {
