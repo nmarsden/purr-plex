@@ -16,7 +16,11 @@ const Grid: FunctionComponent<any> = ({ children }) => {
   ];
   const gameDimensions = useGameDimensions();
   const cellSize = gameDimensions.cellSize;
-  const cellStyles = {
+  const gridInlineStyles = {
+    left: `${gameDimensions.gridLeft}px`,
+    top: `${gameDimensions.gridTop}px`
+  };
+  const cellInlineStyles = {
     width: `${cellSize}px`,
     height: `${cellSize}px`
   };
@@ -25,7 +29,7 @@ const Grid: FunctionComponent<any> = ({ children }) => {
     const cells: Array<ReactNode> = [];
     cellType.split('').forEach( (ch, colIndex) =>  {
       cells.push(<div key={colIndex}
-                      style={cellStyles}
+                      style={cellInlineStyles}
                       className={ch === 'O' ? styles.cell : styles.shadedCell}>
                  </div>)
     });
@@ -33,11 +37,10 @@ const Grid: FunctionComponent<any> = ({ children }) => {
   } );
 
   return (
-    <div className={styles.gridContainer}>
-      <div className={styles.grid}>
-        {rows}
-        { children }
-      </div>
+    <div style={gridInlineStyles}
+         className={styles.grid}>
+      {rows}
+      { children }
     </div>
   );
 };

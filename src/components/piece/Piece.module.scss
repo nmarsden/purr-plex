@@ -4,3 +4,7 @@ $piece-colour: #5bb8ff;
   position: absolute;
   background-color: $piece-colour;
 }
+
+.isDragging {
+  background-color: red;
+}

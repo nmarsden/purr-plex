@@ -1,18 +1,11 @@
 $grid-line-colour: #929292;
 
-.gridContainer {
-  display: flex;
-  flex-direction:column;
-  justify-content: center;
-  align-items: center;
-}
-
 .grid {
   display: flex;
   flex-direction:column;
   border-left: thin solid $grid-line-colour;
   border-top: thin solid $grid-line-colour;
-  position: relative;
+  position: absolute;
 }
 
 .row {

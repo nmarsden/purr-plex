@@ -43,9 +43,14 @@ const GameDimensionsProvider: FunctionComponent<any> = ({ children }) => {
   const headerHeight = Math.floor( (height - gridSize) * 0.4 );
   const footerHeight = Math.floor( (height - gridSize) * 0.6 );
 
+  const gridTop = headerHeight;
+  const gridLeft = Math.floor( ( width - gridSize ) / 2 );
+
   const gameDimensions = {
     cellSize,
     gridSize,
+    gridLeft,
+    gridTop,
     headerHeight,
     footerHeight
   };

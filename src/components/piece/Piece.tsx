@@ -1,8 +1,11 @@
 import React, { FunctionComponent } from 'react';
+import classNames from 'classnames/bind';
 import styles from './Piece.module.scss';
 import { useGameDimensions } from '../gameDimensionsProvider/GameDimensionsProvider';
 
-const Piece: FunctionComponent<any> = ({ x, y }) => {
+let cx = classNames.bind(styles);
+
+const Piece: FunctionComponent<any> = ({ x, y, isDragging }) => {
   const gameDimensions = useGameDimensions();
   const cellSize = gameDimensions.cellSize;
   const posX = cellSize * x;
@@ -14,9 +17,14 @@ const Piece: FunctionComponent<any> = ({ x, y }) => {
     top: `${posY}px`,
   };
 
+  let className = cx({
+    piece: true,
+    isDragging: isDragging
+  });
+
   return (
     <div style={inlineStyles}
-         className={styles.piece}>
+         className={className}>
     </div>
   );
 };
