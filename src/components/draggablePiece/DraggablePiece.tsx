@@ -6,11 +6,6 @@ import Piece from '../piece/Piece';
 const DraggablePiece: FunctionComponent<any> = ({ onDragStop }) => {
   const gameDimensions = useGameDimensions();
   const [isDragging, setIsDragging] = useState(false);
-  const pieceOffsetGridX = 4;
-  const pieceOffsetGridY = 1;
-  const pieceOffsetX = pieceOffsetGridX * gameDimensions.cellSize;
-  const pieceOffsetY = pieceOffsetGridY * gameDimensions.cellSize;
-  const halfCellSize = gameDimensions.cellSize / 2;
 
   const handleStart = () => {
     setIsDragging(true);
@@ -21,8 +16,9 @@ const DraggablePiece: FunctionComponent<any> = ({ onDragStop }) => {
   const handleStop: DraggableEventHandler = (e: DraggableEvent, data: DraggableData) => {
     const pieceRect = data.node.getBoundingClientRect();
 
-    const gridX = Math.floor( (pieceOffsetX + pieceRect.left + halfCellSize - gameDimensions.gridLeft) / gameDimensions.cellSize );
-    const gridY = Math.floor( (pieceOffsetY + pieceRect.top + halfCellSize - gameDimensions.gridTop) / gameDimensions.cellSize );
+    const halfCellSize = gameDimensions.cellSize / 2;
+    const gridX = Math.floor( (pieceRect.left + halfCellSize - gameDimensions.gridLeft) / gameDimensions.cellSize );
+    const gridY = Math.floor( (pieceRect.top + halfCellSize - gameDimensions.gridTop) / gameDimensions.cellSize );
     const isInsideGrid = gridX >= 0 && gridX <=8 && gridY >=0 && gridY <= 8;
     // console.log(gridX, gridY);
 
@@ -32,12 +28,12 @@ const DraggablePiece: FunctionComponent<any> = ({ onDragStop }) => {
   };
 
   return (
-    // TODO control position (see example)
-    <Draggable onStart={handleStart}
+    <Draggable position={{ x: gameDimensions.draggableLeft, y: gameDimensions.draggableTop }}
+               onStart={handleStart}
                onDrag={handleDrag}
                onStop={handleStop}>
       <div>
-        <Piece x={pieceOffsetGridX} y={pieceOffsetGridY} isDragging={isDragging}/>
+        <Piece isDragging={isDragging}/>
       </div>
     </Draggable>
   );

@@ -5,17 +5,17 @@ import Grid from './components/grid/Grid';
 import DraggablePiece from './components/draggablePiece/DraggablePiece';
 import Piece from './components/piece/Piece';
 
-function App() {
-  interface PieceData {
-    x: number,
-    y: number
-  }
+interface PieceData {
+  gridX: number,
+  gridY: number
+}
 
+function App() {
   const [pieces, setPieces] = useState<PieceData[]>([]);
 
   const onPieceDragStop = ({ isInsideGrid, gridX, gridY }:any) => {
     if (isInsideGrid) {
-      setPieces([...pieces, { x:gridX, y:gridY }]);
+      setPieces([...pieces, { gridX, gridY }]);
     }
   };
 
@@ -24,9 +24,9 @@ function App() {
       <div>
         <GameHeader/>
         <Grid>
-          {pieces.map( (p, i) => <Piece key={i} x={p.x} y={p.y} />)}
-          <DraggablePiece onDragStop={onPieceDragStop}/>
+          {pieces.map( (p, i) => <Piece key={i} x={p.gridX} y={p.gridY} />)}
         </Grid>
+        <DraggablePiece onDragStop={onPieceDragStop}/>
       </div>
     </GameDimensionsProvider>
   );

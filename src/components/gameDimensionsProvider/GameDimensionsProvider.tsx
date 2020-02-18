@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, FunctionComponent } from 'react'
+import React, { createContext, FunctionComponent, useContext, useEffect, useState } from 'react'
 
 const GameDimensionsCtx = createContext<any>(null);
 
@@ -46,13 +46,18 @@ const GameDimensionsProvider: FunctionComponent<any> = ({ children }) => {
   const gridTop = headerHeight;
   const gridLeft = Math.floor( ( width - gridSize ) / 2 );
 
+  const draggableLeft = Math.floor(gridLeft + (gridSize / 2) - (cellSize / 2) );
+  const draggableTop = Math.floor( gridTop + gridSize + (cellSize * 1.5) );
+
   const gameDimensions = {
     cellSize,
     gridSize,
     gridLeft,
     gridTop,
     headerHeight,
-    footerHeight
+    footerHeight,
+    draggableLeft,
+    draggableTop
   };
 
   return (

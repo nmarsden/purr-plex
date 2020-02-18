@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './GameHeader.module.scss';
 import { useGameDimensions } from '../gameDimensionsProvider/GameDimensionsProvider';
 
 function GameHeader() {
@@ -9,7 +10,7 @@ function GameHeader() {
   };
 
   return (
-    <div style={inlineStyles}></div>
+    <div className={styles.header} style={inlineStyles}></div>
   );
 }
 
