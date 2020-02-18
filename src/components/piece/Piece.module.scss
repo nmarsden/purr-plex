@@ -1,0 +1,12 @@
+.piece {
+  position: absolute;
+  transition: transform 100ms;
+}
+
+.isDraggable {
+  transform: scale(0.5);
+}
+
+.isDragging {
+  transform: scale(1);
+}

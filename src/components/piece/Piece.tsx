@@ -1,4 +1,6 @@
 import React, { FunctionComponent } from 'react';
+import classNames from 'classnames/bind';
+import styles from './Piece.module.scss';
 import { useGameDimensions } from '../gameDimensionsProvider/GameDimensionsProvider';
 import Block from '../block/Block';
 
@@ -39,16 +41,29 @@ const SHAPES:Map<string, Array<BlockOffset>> = new Map([
 
 const shapeToBlocks = (x:number, y:number, size:number, shape:string, isDragging:boolean) => {
   const blockOffsets:Array<BlockOffset> = SHAPES.get(shape) || [];
-  return blockOffsets.map(o => <Block x={x+(o.x * size)} y={y+(o.y * size)} size={size} isDragging={isDragging}/>);
+  return blockOffsets.map( (o, i) => <Block key={i} x={x+(o.x * size)} y={y+(o.y * size)} size={size} isDragging={isDragging}/>);
 };
 
-const Piece: FunctionComponent<any> = ({ x, y, shape, isDragging }) => {
+let cx = classNames.bind(styles);
+
+const Piece: FunctionComponent<any> = ({ x, y, shape, isDraggable, isDragging }) => {
   const gameDimensions = useGameDimensions();
   const cellSize = gameDimensions.cellSize;
   const blocks = shapeToBlocks(cellSize * x, cellSize * y, cellSize, shape, isDragging);
 
+  const shapeDims = shapeDimensions(shape, cellSize);
+  let inlineStyles = {
+    width: `${shapeDims.width}px`,
+    height: `${shapeDims.height}px`
+  };
+  let className = cx({
+    piece: true,
+    isDraggable: isDraggable,
+    isDragging: isDragging,
+  });
+
   return (
-		<div>
+		<div style={inlineStyles} className={className}>
       {blocks}
 		</div>
 );

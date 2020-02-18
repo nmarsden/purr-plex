@@ -36,7 +36,7 @@ const DraggablePiece: FunctionComponent<any> = ({ shape, onDragStop }) => {
                onDrag={handleDrag}
                onStop={handleStop}>
       <div>
-        <Piece x={0} y={0} shape={shape} isDragging={isDragging}/>
+        <Piece x={0} y={0} shape={shape} isDraggable={true} isDragging={isDragging}/>
       </div>
     </Draggable>
   );
