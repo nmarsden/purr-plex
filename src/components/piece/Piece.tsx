@@ -56,16 +56,21 @@ const Piece: FunctionComponent<any> = ({ x, y, shape, isDraggable, isDragging })
     width: `${shapeDims.width}px`,
     height: `${shapeDims.height}px`
   };
-  let className = cx({
+  let containerClassName = cx({
+    container: true
+  });
+  let pieceClassName = cx({
     piece: true,
     isDraggable: isDraggable,
     isDragging: isDragging,
   });
 
   return (
-		<div style={inlineStyles} className={className}>
-      {blocks}
-		</div>
+    <div style={inlineStyles} className={containerClassName}>
+      <div style={inlineStyles} className={pieceClassName}>
+        {blocks}
+      </div>
+    </div>
 );
 };
 
