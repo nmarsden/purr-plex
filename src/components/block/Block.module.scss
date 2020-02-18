@@ -1,0 +1,10 @@
+$block-colour: #5bb8ff;
+
+.block {
+  position: absolute;
+  background-color: $block-colour;
+}
+
+.isDragging {
+  background-color: red;
+}
