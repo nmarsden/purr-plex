@@ -3,19 +3,26 @@ import GameDimensionsProvider from './components/gameDimensionsProvider/GameDime
 import GameHeader from './components/gameHeader/GameHeader';
 import Grid from './components/grid/Grid';
 import DraggablePiece from './components/draggablePiece/DraggablePiece';
-import Piece from './components/piece/Piece';
+import Piece, { pickRandomShape } from './components/piece/Piece';
 
 interface PieceData {
   gridX: number,
-  gridY: number
+  gridY: number,
+  shape: string
 }
 
 function App() {
   const [pieces, setPieces] = useState<PieceData[]>([]);
+  const [nextShape, setNextShape] = useState<string>('1B');
 
-  const onPieceDragStop = ({ isInsideGrid, gridX, gridY }:any) => {
+  const updateNextShape = () => {
+    setNextShape(pickRandomShape());
+  };
+
+  const onPieceDragStop = ({ isInsideGrid, gridX, gridY, shape }:any) => {
     if (isInsideGrid) {
-      setPieces([...pieces, { gridX, gridY }]);
+      setPieces([...pieces, { gridX, gridY, shape }]);
+      updateNextShape();
     }
   };
 
@@ -24,9 +31,9 @@ function App() {
       <div>
         <GameHeader/>
         <Grid>
-          {pieces.map( (p, i) => <Piece key={i} x={p.gridX} y={p.gridY} />)}
+          {pieces.map( (p, i) => <Piece key={i} x={p.gridX} y={p.gridY} shape={p.shape}/>)}
         </Grid>
-        <DraggablePiece onDragStop={onPieceDragStop}/>
+        <DraggablePiece shape={nextShape} onDragStop={onPieceDragStop}/>
       </div>
     </GameDimensionsProvider>
   );

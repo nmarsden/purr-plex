@@ -3,7 +3,7 @@ import { useGameDimensions } from '../gameDimensionsProvider/GameDimensionsProvi
 import Draggable, { DraggableData, DraggableEvent, DraggableEventHandler } from "react-draggable";
 import Piece from '../piece/Piece';
 
-const DraggablePiece: FunctionComponent<any> = ({ onDragStop }) => {
+const DraggablePiece: FunctionComponent<any> = ({ shape, onDragStop }) => {
   const gameDimensions = useGameDimensions();
   const [isDragging, setIsDragging] = useState(false);
 
@@ -24,7 +24,7 @@ const DraggablePiece: FunctionComponent<any> = ({ onDragStop }) => {
 
     setIsDragging(false);
 
-    onDragStop({ isInsideGrid, gridX, gridY });
+    onDragStop({ isInsideGrid, gridX, gridY, shape });
   };
 
   return (
@@ -33,7 +33,7 @@ const DraggablePiece: FunctionComponent<any> = ({ onDragStop }) => {
                onDrag={handleDrag}
                onStop={handleStop}>
       <div>
-        <Piece isDragging={isDragging}/>
+        <Piece shape={shape} isDragging={isDragging}/>
       </div>
     </Draggable>
   );
