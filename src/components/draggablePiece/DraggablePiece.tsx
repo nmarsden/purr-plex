@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useState } from 'react';
 import { useGameDimensions } from '../gameDimensionsProvider/GameDimensionsProvider';
 import Draggable, { DraggableData, DraggableEvent, DraggableEventHandler } from "react-draggable";
-import Piece from '../piece/Piece';
+import Piece, { shapeDimensions } from '../piece/Piece';
 
 const DraggablePiece: FunctionComponent<any> = ({ shape, onDragStop }) => {
   const gameDimensions = useGameDimensions();
@@ -28,7 +28,10 @@ const DraggablePiece: FunctionComponent<any> = ({ shape, onDragStop }) => {
   };
 
   return (
-    <Draggable position={{ x: gameDimensions.draggableLeft, y: gameDimensions.draggableTop }}
+    <Draggable position={{
+                           x: gameDimensions.draggableLeft - (shapeDimensions(shape, gameDimensions.cellSize).width / 2),
+                           y: gameDimensions.draggableTop - (shapeDimensions(shape, gameDimensions.cellSize).height / 2)
+                         }}
                onStart={handleStart}
                onDrag={handleDrag}
                onStop={handleStop}>

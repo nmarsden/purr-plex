@@ -55,4 +55,25 @@ const Piece: FunctionComponent<any> = ({ x, y, shape, isDragging }) => {
 };
 
 export default Piece;
+
 export const pickRandomShape = ():string => { return Array.from(SHAPES.keys())[Math.floor(Math.random() * SHAPES.size)] };
+
+export const shapeDimensions = (shape:string, blockSize:number) => {
+  const blockOffsets:Array<BlockOffset> = SHAPES.get(shape) || [];
+  let minX = blockOffsets[0].x;
+  let minY = blockOffsets[0].y;
+  let maxX = blockOffsets[0].x;
+  let maxY = blockOffsets[0].y;
+
+  for (let i = 1, len=blockOffsets.length; i < len; i++) {
+    let x = blockOffsets[i].x;
+    let y = blockOffsets[i].y;
+    minX = (x < minX) ? x : minX;
+    minY = (y < minY) ? y : minY;
+    maxX = (x > maxX) ? x : maxX;
+    maxY = (y > maxY) ? y : maxY;
+  }
+  const width = (maxX - minX + 1) * blockSize;
+  const height = (maxY - minY + 1) * blockSize;
+  return { width, height };
+};
