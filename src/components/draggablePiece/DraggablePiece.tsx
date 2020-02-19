@@ -1,4 +1,5 @@
 import React, { FunctionComponent, useState } from 'react';
+import styles from './DraggablePiece.module.scss';
 import { useGameDimensions } from '../gameDimensionsProvider/GameDimensionsProvider';
 import Draggable, { DraggableData, DraggableEvent, DraggableEventHandler } from "react-draggable";
 import Piece, { shapeDimensions } from '../piece/Piece';
@@ -6,8 +7,16 @@ import Piece, { shapeDimensions } from '../piece/Piece';
 const DraggablePiece: FunctionComponent<any> = ({ shape, onDragStop }) => {
   const gameDimensions = useGameDimensions();
   const [isDragging, setIsDragging] = useState(false);
+  const [position, setPosition] = useState({x:0,y:0});
+  const dragStartYOffset = -(gameDimensions.cellSize * 2);
+
+  let containerInlineStyles = {
+    left: `${gameDimensions.draggableLeft - (shapeDimensions(shape, gameDimensions.cellSize).width / 2)}px`,
+    top: `${gameDimensions.draggableTop - (shapeDimensions(shape, gameDimensions.cellSize).height / 2)}px`
+  };
 
   const handleStart = () => {
+    setPosition({x:0,y:dragStartYOffset});
     setIsDragging(true);
   };
   const handleDrag = () => {
@@ -22,23 +31,23 @@ const DraggablePiece: FunctionComponent<any> = ({ shape, onDragStop }) => {
     const isInsideGrid = gridX >= 0 && gridX <=8 && gridY >=0 && gridY <= 8;
     // console.log(gridX, gridY);
 
+    setPosition({x:0,y:0});
     setIsDragging(false);
 
     onDragStop({ isInsideGrid, gridX, gridY, shape });
   };
 
   return (
-    <Draggable position={{
-                           x: gameDimensions.draggableLeft - (shapeDimensions(shape, gameDimensions.cellSize).width / 2),
-                           y: gameDimensions.draggableTop - (shapeDimensions(shape, gameDimensions.cellSize).height / 2)
-                         }}
-               onStart={handleStart}
-               onDrag={handleDrag}
-               onStop={handleStop}>
-      <div>
-        <Piece x={0} y={0} shape={shape} isDraggable={true} isDragging={isDragging}/>
-      </div>
-    </Draggable>
+    <div style={containerInlineStyles} className={styles.container}>
+      <Draggable position={position}
+                 onStart={handleStart}
+                 onDrag={handleDrag}
+                 onStop={handleStop}>
+        <div>
+          <Piece x={0} y={0} shape={shape} isDraggable={true} isDragging={isDragging}/>
+        </div>
+      </Draggable>
+    </div>
   );
 };
 
