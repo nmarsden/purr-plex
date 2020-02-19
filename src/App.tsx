@@ -3,28 +3,39 @@ import GameDimensionsProvider from './components/gameDimensionsProvider/GameDime
 import GameHeader from './components/gameHeader/GameHeader';
 import Grid from './components/grid/Grid';
 import DraggablePiece from './components/draggablePiece/DraggablePiece';
-import { pickRandomShape, PieceData } from './components/piece/Piece';
+import { calculatePlaceable, pickRandomShape, PieceData } from './components/piece/Piece';
+
+const initialShape = pickRandomShape();
+
+let placeable:boolean[][] = calculatePlaceable(initialShape, []);
 
 function App() {
   const [placedPieces, setPlacedPieces] = useState<PieceData[]>([]);
   const [hoverPiece, setHoverPiece] = useState<PieceData | null>();
-  const [nextShape, setNextShape] = useState<string>(pickRandomShape());
+  const [nextShape, setNextShape] = useState<string>(initialShape);
 
-  const updateNextShape = () => {
-    setNextShape(pickRandomShape());
+  const isPlaceable = (isInsideGrid:boolean, gridX:number, gridY:number): boolean => {
+    return isInsideGrid && placeable[gridX][gridY];
+  };
+
+  const updateNextShape = (placedPieces:PieceData[]) => {
+    const shape = pickRandomShape();
+    setNextShape(shape);
+    placeable = calculatePlaceable(shape, placedPieces);
   };
 
   const onPieceDrag = ({ isInsideGrid, gridX, gridY, shape }:any) => {
-    if (isInsideGrid) {
+    if (isPlaceable(isInsideGrid, gridX, gridY)) {
       setHoverPiece({ gridX, gridY, shape });
     } else {
       setHoverPiece(null);
     }
   };
   const onPieceDragStop = ({ isInsideGrid, gridX, gridY, shape }:any) => {
-    if (isInsideGrid) {
-      setPlacedPieces([...placedPieces, { gridX, gridY, shape }]);
-      updateNextShape();
+    if (isPlaceable(isInsideGrid, gridX, gridY)) {
+      const newPlacedPieces = [...placedPieces, { gridX, gridY, shape }];
+      setPlacedPieces(newPlacedPieces);
+      updateNextShape(newPlacedPieces);
     }
     setHoverPiece(null);
   };

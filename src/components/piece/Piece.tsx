@@ -51,6 +51,33 @@ const shapeToBlocks = (x:number, y:number, size:number, shape:string, isDragging
     />);
 };
 
+const shapeToGridPositions = (gridX:number, gridY:number, shape:string):Array<GridPos> => {
+  const blockOffsets:Array<BlockOffset> = SHAPES.get(shape) || [];
+  return blockOffsets.map(o => { return { x: gridX + o.x, y: gridY + o.y } });
+};
+
+const initMultiDim = (value:boolean):boolean[][] => {
+  let multiDim = [];
+  for (let gridX=0; gridX<9; gridX++) {
+    let arr:boolean[] = [];
+    multiDim.push(arr);
+    for (let gridY=0; gridY<9; gridY++) {
+      arr.push(value);
+    }
+  }
+  return multiDim;
+};
+
+const calculateOccupied = (placedPieces:PieceData[]):boolean[][] => {
+  let occupied = initMultiDim(false);
+  placedPieces.forEach(pp => {
+    shapeToGridPositions(pp.gridX, pp.gridY, pp.shape).forEach(gridPos => {
+      occupied[gridPos.x][gridPos.y] = true;
+    })
+  });
+  return occupied;
+};
+
 let cx = classNames.bind(styles);
 
 const Piece: FunctionComponent<any> = ({ x, y, shape, isDraggable, isDragging, isMuted }) => {
@@ -83,6 +110,11 @@ const Piece: FunctionComponent<any> = ({ x, y, shape, isDraggable, isDragging, i
 
 export default Piece;
 
+export interface GridPos {
+  x: number,
+  y: number
+}
+
 export interface PieceData {
   gridX: number,
   gridY: number,
@@ -109,4 +141,21 @@ export const shapeDimensions = (shape:string, blockSize:number) => {
   const width = (maxX - minX + 1) * blockSize;
   const height = (maxY - minY + 1) * blockSize;
   return { width, height };
+};
+
+export const calculatePlaceable = (shape:string, placedPieces:PieceData[]):boolean[][] => {
+  const occupied:boolean[][] = calculateOccupied(placedPieces);
+  let placeable:boolean[][] = initMultiDim(false);
+
+  for (let gridX=0; gridX<9; gridX++) {
+    for (let gridY=0; gridY<9; gridY++) {
+
+      let isPlaceable = true;
+      shapeToGridPositions(gridX, gridY, shape).forEach(gridPos => {
+        isPlaceable = isPlaceable && gridPos.x < 9 && gridPos.y < 9 && !occupied[gridPos.x][gridPos.y];
+      });
+      placeable[gridX][gridY] = isPlaceable;
+    }
+  }
+  return placeable;
 };
