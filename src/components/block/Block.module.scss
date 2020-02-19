@@ -1,13 +1,22 @@
 $block-colour: #5bb8ff;
+$block-dragging-colour: #64d3ff;
 $block-muted-colour: #dedede;
+$block-border-colour: #343434;
 
 .block {
   position: absolute;
   background-color: $block-colour;
+  border: thin solid $block-border-colour;
 }
 
+.isPreDragging {
+  transition: width 100ms, height 100ms;
+}
+
+// TODO Fix issue with scaling losing border.  Possible fix: change width & height instead of scaling
 .isDragging {
-  transform: scale(0.9);
+  transform: scale(0.8);
+  background-color: $block-dragging-colour;
 }
 
 .isMuted {

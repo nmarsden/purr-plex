@@ -1,19 +1,33 @@
 import React, { FunctionComponent, useState } from 'react';
+import classNames from 'classnames/bind';
 import styles from './DraggablePiece.module.scss';
 import { useGameDimensions } from '../gameDimensionsProvider/GameDimensionsProvider';
 import Draggable, { DraggableData, DraggableEvent, DraggableEventHandler } from "react-draggable";
 import Piece, { shapeDimensions } from '../piece/Piece';
 
+let cx = classNames.bind(styles);
+
 const DraggablePiece: FunctionComponent<any> = ({ shape, onDrag, onDragStop }) => {
   const gameDimensions = useGameDimensions();
+  const shapeDims = shapeDimensions(shape, gameDimensions.cellSize);
+  const smallShapeDims = shapeDimensions(shape, gameDimensions.cellSize / 2);
+  const initialPosition = {
+    x: (shapeDims.width - smallShapeDims.width) / 2,
+    y: (shapeDims.height - smallShapeDims.height) / 2
+  };
+  const [isPreDragging, setIsPreDragging] = useState(true);
   const [isDragging, setIsDragging] = useState(false);
-  const [position, setPosition] = useState({x:0,y:0});
+  const [position, setPosition] = useState(initialPosition);
   const dragStartYOffset = -(gameDimensions.cellSize * 2);
 
   let containerInlineStyles = {
-    left: `${gameDimensions.draggableLeft - (shapeDimensions(shape, gameDimensions.cellSize).width / 2)}px`,
-    top: `${gameDimensions.draggableTop - (shapeDimensions(shape, gameDimensions.cellSize).height / 2)}px`
+    left: `${gameDimensions.draggableLeft - (shapeDims.width / 2)}px`,
+    top: `${gameDimensions.draggableTop - (shapeDims.height / 2)}px`
   };
+
+  let pieceContainerClassName = cx({
+    isPreDragging: isPreDragging,
+  });
 
   const toGridDragData = (data: DraggableData) => {
     const pieceRect = data.node.getBoundingClientRect();
@@ -27,16 +41,18 @@ const DraggablePiece: FunctionComponent<any> = ({ shape, onDrag, onDragStop }) =
   };
 
   const handleStart = () => {
+    setIsPreDragging(true);
     setPosition({x:0,y:dragStartYOffset});
     setIsDragging(true);
   };
   const handleDrag: DraggableEventHandler = (e: DraggableEvent, data: DraggableData) => {
+    setIsPreDragging(false);
     onDrag(toGridDragData(data));
   };
   const handleStop: DraggableEventHandler = (e: DraggableEvent, data: DraggableData) => {
     const gridDragData = toGridDragData(data);
 
-    setPosition({x:0,y:0});
+    setPosition(initialPosition);
     setIsDragging(false);
 
     onDragStop(gridDragData);
@@ -48,8 +64,8 @@ const DraggablePiece: FunctionComponent<any> = ({ shape, onDrag, onDragStop }) =
                  onStart={handleStart}
                  onDrag={handleDrag}
                  onStop={handleStop}>
-        <div>
-          <Piece x={0} y={0} shape={shape} isDraggable={true} isDragging={isDragging}/>
+        <div className={pieceContainerClassName}>
+          <Piece x={0} y={0} shape={shape} isDraggable={true} isPreDragging={isPreDragging} isDragging={isDragging}/>
         </div>
       </Draggable>
     </div>

@@ -1,3 +1,7 @@
 .container {
   position: absolute;
 }
+
+.isPreDragging {
+  transition: transform 100ms;
+}
