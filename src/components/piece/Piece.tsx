@@ -39,17 +39,24 @@ const SHAPES:Map<string, Array<BlockOffset>> = new Map([
   ['4B_I_2',  [{x:0,y:0}, {x:0,y:1}, {x:0,y:2}, {x:0,y:3}]],
 ]);
 
-const shapeToBlocks = (x:number, y:number, size:number, shape:string, isDragging:boolean) => {
+const shapeToBlocks = (x:number, y:number, size:number, shape:string, isDragging:boolean, isMuted:boolean) => {
   const blockOffsets:Array<BlockOffset> = SHAPES.get(shape) || [];
-  return blockOffsets.map( (o, i) => <Block key={i} x={x+(o.x * size)} y={y+(o.y * size)} size={size} isDragging={isDragging}/>);
+  return blockOffsets.map( (o, i) =>
+    <Block key={i}
+           x={x+(o.x * size)}
+           y={y+(o.y * size)}
+           size={size}
+           isDragging={isDragging}
+           isMuted={isMuted}
+    />);
 };
 
 let cx = classNames.bind(styles);
 
-const Piece: FunctionComponent<any> = ({ x, y, shape, isDraggable, isDragging }) => {
+const Piece: FunctionComponent<any> = ({ x, y, shape, isDraggable, isDragging, isMuted }) => {
   const gameDimensions = useGameDimensions();
   const cellSize = gameDimensions.cellSize;
-  const blocks = shapeToBlocks(cellSize * x, cellSize * y, cellSize, shape, isDragging);
+  const blocks = shapeToBlocks(cellSize * x, cellSize * y, cellSize, shape, isDragging, isMuted);
 
   const shapeDims = shapeDimensions(shape, cellSize);
   let inlineStyles = {
@@ -75,6 +82,12 @@ const Piece: FunctionComponent<any> = ({ x, y, shape, isDraggable, isDragging })
 };
 
 export default Piece;
+
+export interface PieceData {
+  gridX: number,
+  gridY: number,
+  shape: string
+}
 
 export const pickRandomShape = ():string => { return Array.from(SHAPES.keys())[Math.floor(Math.random() * SHAPES.size)] };
 

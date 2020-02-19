@@ -1,4 +1,5 @@
 $block-colour: #5bb8ff;
+$block-muted-colour: #dedede;
 
 .block {
   position: absolute;
@@ -7,4 +8,8 @@ $block-colour: #5bb8ff;
 
 .isDragging {
   transform: scale(0.9);
+}
+
+.isMuted {
+  background-color: $block-muted-colour;
 }

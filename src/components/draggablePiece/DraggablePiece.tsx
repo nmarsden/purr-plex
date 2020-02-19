@@ -4,7 +4,7 @@ import { useGameDimensions } from '../gameDimensionsProvider/GameDimensionsProvi
 import Draggable, { DraggableData, DraggableEvent, DraggableEventHandler } from "react-draggable";
 import Piece, { shapeDimensions } from '../piece/Piece';
 
-const DraggablePiece: FunctionComponent<any> = ({ shape, onDragStop }) => {
+const DraggablePiece: FunctionComponent<any> = ({ shape, onDrag, onDragStop }) => {
   const gameDimensions = useGameDimensions();
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState({x:0,y:0});
@@ -15,26 +15,31 @@ const DraggablePiece: FunctionComponent<any> = ({ shape, onDragStop }) => {
     top: `${gameDimensions.draggableTop - (shapeDimensions(shape, gameDimensions.cellSize).height / 2)}px`
   };
 
-  const handleStart = () => {
-    setPosition({x:0,y:dragStartYOffset});
-    setIsDragging(true);
-  };
-  const handleDrag = () => {
-    // console.log('dragging');
-  };
-  const handleStop: DraggableEventHandler = (e: DraggableEvent, data: DraggableData) => {
+  const toGridDragData = (data: DraggableData) => {
     const pieceRect = data.node.getBoundingClientRect();
 
     const halfCellSize = gameDimensions.cellSize / 2;
     const gridX = Math.floor( (pieceRect.left + halfCellSize - gameDimensions.gridLeft) / gameDimensions.cellSize );
     const gridY = Math.floor( (pieceRect.top + halfCellSize - gameDimensions.gridTop) / gameDimensions.cellSize );
     const isInsideGrid = gridX >= 0 && gridX <=8 && gridY >=0 && gridY <= 8;
-    // console.log(gridX, gridY);
+
+    return { isInsideGrid, gridX, gridY, shape };
+  };
+
+  const handleStart = () => {
+    setPosition({x:0,y:dragStartYOffset});
+    setIsDragging(true);
+  };
+  const handleDrag: DraggableEventHandler = (e: DraggableEvent, data: DraggableData) => {
+    onDrag(toGridDragData(data));
+  };
+  const handleStop: DraggableEventHandler = (e: DraggableEvent, data: DraggableData) => {
+    const gridDragData = toGridDragData(data);
 
     setPosition({x:0,y:0});
     setIsDragging(false);
 
-    onDragStop({ isInsideGrid, gridX, gridY, shape });
+    onDragStop(gridDragData);
   };
 
   return (

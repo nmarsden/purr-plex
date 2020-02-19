@@ -1,8 +1,9 @@
 import React, { FunctionComponent, ReactNode } from 'react';
 import styles from './Grid.module.scss';
 import { useGameDimensions } from '../gameDimensionsProvider/GameDimensionsProvider';
+import Piece, { PieceData } from '../piece/Piece';
 
-const Grid: FunctionComponent<any> = ({ children }) => {
+const Grid: FunctionComponent<any> = ({ placedPieces, hoverPiece }) => {
   const cellTypes = [
     'OOOXXXOOO',
     'OOOXXXOOO',
@@ -40,7 +41,8 @@ const Grid: FunctionComponent<any> = ({ children }) => {
     <div style={gridInlineStyles}
          className={styles.grid}>
       {rows}
-      { children }
+      {placedPieces.map( (p:PieceData, i:number) => <Piece key={i} x={p.gridX} y={p.gridY} shape={p.shape}/>)}
+      {hoverPiece && <Piece key={999} x={hoverPiece.gridX} y={hoverPiece.gridY} shape={hoverPiece.shape} isMuted={true}/>}
     </div>
   );
 };

@@ -3,37 +3,38 @@ import GameDimensionsProvider from './components/gameDimensionsProvider/GameDime
 import GameHeader from './components/gameHeader/GameHeader';
 import Grid from './components/grid/Grid';
 import DraggablePiece from './components/draggablePiece/DraggablePiece';
-import Piece, { pickRandomShape } from './components/piece/Piece';
-
-interface PieceData {
-  gridX: number,
-  gridY: number,
-  shape: string
-}
+import { pickRandomShape, PieceData } from './components/piece/Piece';
 
 function App() {
-  const [pieces, setPieces] = useState<PieceData[]>([]);
-  const [nextShape, setNextShape] = useState<string>('1B');
+  const [placedPieces, setPlacedPieces] = useState<PieceData[]>([]);
+  const [hoverPiece, setHoverPiece] = useState<PieceData | null>();
+  const [nextShape, setNextShape] = useState<string>(pickRandomShape());
 
   const updateNextShape = () => {
     setNextShape(pickRandomShape());
   };
 
+  const onPieceDrag = ({ isInsideGrid, gridX, gridY, shape }:any) => {
+    if (isInsideGrid) {
+      setHoverPiece({ gridX, gridY, shape });
+    } else {
+      setHoverPiece(null);
+    }
+  };
   const onPieceDragStop = ({ isInsideGrid, gridX, gridY, shape }:any) => {
     if (isInsideGrid) {
-      setPieces([...pieces, { gridX, gridY, shape }]);
+      setPlacedPieces([...placedPieces, { gridX, gridY, shape }]);
       updateNextShape();
     }
+    setHoverPiece(null);
   };
 
   return (
     <GameDimensionsProvider>
       <div>
         <GameHeader/>
-        <Grid>
-          {pieces.map( (p, i) => <Piece key={i} x={p.gridX} y={p.gridY} shape={p.shape}/>)}
-        </Grid>
-        <DraggablePiece shape={nextShape} onDragStop={onPieceDragStop}/>
+        <Grid placedPieces={placedPieces} hoverPiece={hoverPiece}/>
+        <DraggablePiece shape={nextShape} onDrag={onPieceDrag} onDragStop={onPieceDragStop}/>
       </div>
     </GameDimensionsProvider>
   );
