@@ -9,3 +9,12 @@
   position: absolute;
   transition: transform 100ms;
 }
+
+.isCompleted {
+  animation: fade-out 500ms linear;
+}
+
+@keyframes fade-out {
+  0%   { opacity: 1 }
+  100% { opacity: 0 }
+}

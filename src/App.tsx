@@ -3,15 +3,31 @@ import GameDimensionsProvider from './components/gameDimensionsProvider/GameDime
 import GameHeader from './components/gameHeader/GameHeader';
 import Grid from './components/grid/Grid';
 import DraggablePiece from './components/draggablePiece/DraggablePiece';
-import { calculatePlaceable, pickRandomShape, PieceData } from './components/piece/Piece';
+import {
+  calculatePlaceable,
+  getCompletedGridPositions,
+  pickRandomShape,
+  PieceData,
+  removeCompleted,
+} from './components/piece/Piece';
 
 const initialShape = pickRandomShape();
+const initialPlacedPieces:PieceData[] = [];
+
+// FOR TESTING (replace above code with this)
+// const initialShape = '3B_I_1';
+// const initialPlacedPieces:PieceData[] = [
+//   { gridX: 2, gridY: 1, shape: '2B_I_2' },
+//   { gridX: 2, gridY: 3, shape: '3B_I_2' },
+//   { gridX: 2, gridY: 6, shape: '3B_I_2' }
+// ];
 
 let placeable:boolean[][] = calculatePlaceable(initialShape, []);
 
 function App() {
-  const [placedPieces, setPlacedPieces] = useState<PieceData[]>([]);
+  const [placedPieces, setPlacedPieces] = useState<PieceData[]>(initialPlacedPieces);
   const [hoverPiece, setHoverPiece] = useState<PieceData | null>();
+  const [completedBlocks, setCompletedBlocks] = useState<PieceData[]>([]);
   const [nextShape, setNextShape] = useState<string>(initialShape);
 
   const isPlaceable = (isInsideGrid:boolean, gridX:number, gridY:number): boolean => {
@@ -33,7 +49,17 @@ function App() {
   };
   const onPieceDragStop = ({ isInsideGrid, gridX, gridY, shape }:any) => {
     if (isPlaceable(isInsideGrid, gridX, gridY)) {
-      const newPlacedPieces = [...placedPieces, { gridX, gridY, shape }];
+      const placedPiece = { gridX, gridY, shape };
+      let newPlacedPieces = [...placedPieces, placedPiece];
+
+      const completedGridPositions = getCompletedGridPositions(placedPiece, newPlacedPieces);
+      if (completedGridPositions.length > 0) {
+        // TODO have removeCompleted also return completedPieces instead of using a '1B' for each completedGridPositions
+        newPlacedPieces = removeCompleted(newPlacedPieces, completedGridPositions);
+        setCompletedBlocks(completedGridPositions.map(p => { return { gridX:p.x, gridY:p.y, shape:'1B' }}));
+        window.setTimeout(() => { setCompletedBlocks([])}, 500);
+      }
+
       setPlacedPieces(newPlacedPieces);
       updateNextShape(newPlacedPieces);
     }
@@ -44,7 +70,7 @@ function App() {
     <GameDimensionsProvider>
       <div>
         <GameHeader/>
-        <Grid placedPieces={placedPieces} hoverPiece={hoverPiece}/>
+        <Grid placedPieces={placedPieces} hoverPiece={hoverPiece} completedBlocks={completedBlocks}/>
         <DraggablePiece shape={nextShape} onDrag={onPieceDrag} onDragStop={onPieceDragStop}/>
       </div>
     </GameDimensionsProvider>

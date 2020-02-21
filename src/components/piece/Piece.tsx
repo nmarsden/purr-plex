@@ -8,32 +8,33 @@ interface BlockOffset {
   x: number,
   y: number
 }
+// SHAPES: each shape has an associated array of BlockOffset which is ordered by x ascending and then y ascending
 const SHAPES:Map<string, Array<BlockOffset>> = new Map([
   ['1B',      [{x:0,y:0}]],
   ['2B_I_1',  [{x:0,y:0}, {x:1,y:0}]],
   ['2B_I_2',  [{x:0,y:0}, {x:0,y:1}]],
   ['3B_I_1',  [{x:0,y:0}, {x:1,y:0}, {x:2,y:0}]],
   ['3B_I_2',  [{x:0,y:0}, {x:0,y:1}, {x:0,y:2}]],
-  ['3B_L_1',  [{x:1,y:0}, {x:1,y:1}, {x:0,y:1}]],
+  ['3B_L_1',  [{x:0,y:1}, {x:1,y:0}, {x:1,y:1}]],
   ['3B_L_2',  [{x:0,y:0}, {x:1,y:0}, {x:1,y:1}]],
-  ['3B_L_3',  [{x:0,y:0}, {x:1,y:0}, {x:0,y:1}]],
+  ['3B_L_3',  [{x:0,y:0}, {x:0,y:1}, {x:1,y:0}]],
   ['3B_L_4',  [{x:0,y:0}, {x:0,y:1}, {x:1,y:1}]],
-  ['4B_O',    [{x:0,y:0}, {x:1,y:0}, {x:1,y:1}, {x:0,y:1}]],
-  ['4B_L_1',  [{x:0,y:1}, {x:1,y:1}, {x:2,y:1}, {x:2,y:0}]],
+  ['4B_O',    [{x:0,y:0}, {x:0,y:1}, {x:1,y:0}, {x:1,y:1}]],
+  ['4B_L_1',  [{x:0,y:1}, {x:1,y:1}, {x:2,y:0}, {x:2,y:1}]],
   ['4B_L_2',  [{x:0,y:0}, {x:1,y:0}, {x:1,y:1}, {x:1,y:2}]],
-  ['4B_L_3',  [{x:0,y:1}, {x:0,y:0}, {x:1,y:0}, {x:2,y:0}]],
+  ['4B_L_3',  [{x:0,y:0}, {x:0,y:1}, {x:1,y:0}, {x:2,y:0}]],
   ['4B_L_4',  [{x:0,y:0}, {x:0,y:1}, {x:0,y:2}, {x:1,y:2}]],
   ['4B_J_1',  [{x:0,y:0}, {x:1,y:0}, {x:2,y:0}, {x:2,y:1}]],
-  ['4B_J_2',  [{x:0,y:2}, {x:1,y:2}, {x:1,y:1}, {x:1,y:0}]],
+  ['4B_J_2',  [{x:0,y:2}, {x:1,y:0}, {x:1,y:1}, {x:1,y:2}]],
   ['4B_J_3',  [{x:0,y:0}, {x:0,y:1}, {x:1,y:1}, {x:2,y:1}]],
-  ['4B_J_4',  [{x:0,y:2}, {x:0,y:1}, {x:0,y:0}, {x:1,y:0}]],
-  ['4B_Z_1',  [{x:0,y:2}, {x:0,y:1}, {x:1,y:1}, {x:1,y:0}]],
+  ['4B_J_4',  [{x:0,y:0}, {x:0,y:1}, {x:0,y:2}, {x:1,y:0}]],
+  ['4B_Z_1',  [{x:0,y:1}, {x:0,y:2}, {x:1,y:0}, {x:1,y:1}]],
   ['4B_Z_2',  [{x:0,y:0}, {x:1,y:0}, {x:1,y:1}, {x:2,y:1}]],
   ['4B_S_1',  [{x:0,y:0}, {x:0,y:1}, {x:1,y:1}, {x:1,y:2}]],
-  ['4B_S_2',  [{x:0,y:1}, {x:1,y:1}, {x:1,y:0}, {x:2,y:0}]],
-  ['4B_T_1',  [{x:0,y:1}, {x:1,y:1}, {x:1,y:2}, {x:1,y:0}]],
+  ['4B_S_2',  [{x:0,y:1}, {x:1,y:0}, {x:1,y:1}, {x:2,y:0}]],
+  ['4B_T_1',  [{x:0,y:1}, {x:1,y:0}, {x:1,y:1}, {x:1,y:2}]],
   ['4B_T_2',  [{x:0,y:1}, {x:1,y:0}, {x:1,y:1}, {x:1,y:2}]],
-  ['4B_T_3',  [{x:0,y:0}, {x:1,y:0}, {x:2,y:0}, {x:1,y:1}]],
+  ['4B_T_3',  [{x:0,y:0}, {x:1,y:0}, {x:1,y:1}, {x:2,y:0}]],
   ['4B_T_4',  [{x:0,y:0}, {x:0,y:1}, {x:0,y:2}, {x:1,y:1}]],
   ['4B_I_1',  [{x:0,y:0}, {x:1,y:0}, {x:2,y:0}, {x:3,y:0}]],
   ['4B_I_2',  [{x:0,y:0}, {x:0,y:1}, {x:0,y:2}, {x:0,y:3}]],
@@ -52,9 +53,21 @@ const shapeToBlocks = (x:number, y:number, size:number, shape:string, isPreDragg
     />);
 };
 
-const shapeToGridPositions = (gridX:number, gridY:number, shape:string):Array<GridPos> => {
+export const shapeToGridPositions = (gridX:number, gridY:number, shape:string):Array<GridPos> => {
   const blockOffsets:Array<BlockOffset> = SHAPES.get(shape) || [];
   return blockOffsets.map(o => { return { x: gridX + o.x, y: gridY + o.y } });
+};
+
+const getGridPositions3x3 = (gridPos:GridPos):GridPos[] => {
+  const gridPositions:GridPos[] = [];
+  const leftGridPos3x3 = Math.floor(gridPos.x / 3) * 3;
+  const topGridPos3x3 = Math.floor(gridPos.y / 3) * 3;
+  for (let xOffset=0; xOffset<3; xOffset++) {
+    for (let yOffset=0; yOffset<3; yOffset++) {
+      gridPositions.push({ x:leftGridPos3x3 + xOffset, y: topGridPos3x3 + yOffset });
+    }
+  }
+  return gridPositions;
 };
 
 const initMultiDim = (value:boolean):boolean[][] => {
@@ -81,7 +94,7 @@ const calculateOccupied = (placedPieces:PieceData[]):boolean[][] => {
 
 let cx = classNames.bind(styles);
 
-const Piece: FunctionComponent<any> = ({ x, y, shape, isDraggable, isPreDragging, isDragging, isMuted }) => {
+const Piece: FunctionComponent<any> = ({ x, y, shape, isDraggable, isPreDragging, isDragging, isMuted, isCompleted }) => {
   const gameDimensions = useGameDimensions();
   const cellSize = gameDimensions.cellSize;
   const blockSize = (isDraggable && !isDragging) ? (cellSize/2) : cellSize;
@@ -93,7 +106,8 @@ const Piece: FunctionComponent<any> = ({ x, y, shape, isDraggable, isPreDragging
     height: `${shapeDims.height}px`
   };
   let containerClassName = cx({
-    container: true
+    container: true,
+    isCompleted: isCompleted
   });
   let pieceClassName = cx({
     piece: true,
@@ -122,6 +136,9 @@ export interface PieceData {
 }
 
 export const pickRandomShape = ():string => { return Array.from(SHAPES.keys())[Math.floor(Math.random() * SHAPES.size)] };
+
+// FOR TESTING (replace above code with this)
+// export const pickRandomShape = ():string => { return '3B_I_1' };
 
 export const shapeDimensions = (shape:string, blockSize:number) => {
   const blockOffsets:Array<BlockOffset> = SHAPES.get(shape) || [];
@@ -158,4 +175,146 @@ export const calculatePlaceable = (shape:string, placedPieces:PieceData[]):boole
     }
   }
   return placeable;
+};
+
+export const getCompletedGridPositions = ({ gridX, gridY, shape }:PieceData, placedPieces: PieceData[]): GridPos[] => {
+  const completed:GridPos[] = [];
+  const indices:number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+  const occupied:boolean[][] = calculateOccupied(placedPieces);
+  shapeToGridPositions(gridX, gridY, shape).forEach(gridPos => {
+    // Check for completed column
+    if (occupied[gridPos.x].every(o => o)) {
+      const completedColumn:GridPos[] = indices.map(i => { return { x:gridPos.x, y:i }; });
+      completed.push(...completedColumn);
+    }
+    // Check for completed row
+    if (indices.every(i => occupied[i][gridPos.y])) {
+      const completedRow:GridPos[] = indices.map(i => { return { x:i, y:gridPos.y }; });
+      completed.push(...completedRow);
+    }
+    // Check for completed 3x3
+    const gridPositions3x3 = getGridPositions3x3(gridPos);
+    if (gridPositions3x3.every(({x, y}) => occupied[x][y])) {
+      completed.push(...gridPositions3x3);
+    }
+  });
+
+  return completed;
+};
+
+const toBlockOffsets = (gridX: number, gridY: number, gridPositions: BlockOffset[]) => {
+  return gridPositions.map(pos => { return { x: (pos.x - gridX), y: (pos.y - gridY) } });
+};
+
+const hasNeighbours = (blockOffsets:BlockOffset[], index:number):boolean => {
+  const target = blockOffsets[index];
+  return blockOffsets.some((offset) => (offset.x === target.x && offset.y === target.y+1) ||
+                                       (offset.x === target.x && offset.y === target.y-1) ||
+                                       (offset.y === target.y && offset.x === target.x+1) ||
+                                       (offset.y === target.y && offset.x === target.x-1));
+};
+
+const removeCompletedBlockOffsets = (pieceBlockOffsets: BlockOffset[], completedBlockOffsets:BlockOffset[]):BlockOffset[] => {
+  return pieceBlockOffsets.filter(blockOffset => !completedBlockOffsets.some(c => c.x === blockOffset.x && c.y === blockOffset.y));
+};
+
+const groupBlockOffsetsByNeighbours = (blockOffsets:BlockOffset[]):BlockOffset[][] => {
+  const result:BlockOffset[][] = [];
+  // Any blockOffset without neighbours is its own group
+  // Note: This strategy takes advantage of knowing that we are dealing with at most 3 block offsets, so there will be
+  // at most only be one group of blocks with neighbours, and any other groups will be single blocks without neighbours.
+  const blockOffsetsWithNeighbours:BlockOffset[] = [];
+  for (let i=0; i<blockOffsets.length; i++) {
+    if (hasNeighbours(blockOffsets, i)) {
+      blockOffsetsWithNeighbours.push(blockOffsets[i]);
+    } else {
+      result.push([blockOffsets[i]])
+    }
+  }
+  if (blockOffsetsWithNeighbours.length > 0) {
+    result.push(blockOffsetsWithNeighbours);
+  }
+  return result;
+};
+
+const isEqual = (blockOffsets1: BlockOffset[], blockOffsets2: BlockOffset[]): boolean => {
+  return (blockOffsets1.length === blockOffsets2.length) &&
+         blockOffsets1.every((o, i) => (o.x === blockOffsets2[i].x) && (o.y === blockOffsets2[i].y));
+};
+
+const copyBlockOffsets = (blockOffsets:BlockOffset[]):BlockOffset[] => {
+  return blockOffsets.map(o => { return { x:o.x, y:o.y } });
+};
+
+const compareXThenY = (o1:BlockOffset, o2:BlockOffset):number => {
+  if (o1.x < o2.x) {
+    return -1;
+  }
+  if (o1.x > o2.x) {
+    return 1;
+  }
+  // o1.x equals o2.x
+  if (o1.y < o2.y) {
+    return -1;
+  }
+  return 0;
+};
+
+const sortBlockOffsets = (blockOffsets:BlockOffset[]):BlockOffset[] => {
+  return copyBlockOffsets(blockOffsets).sort(compareXThenY);
+};
+
+const findShape = (blockOffsets: BlockOffset[]):string => {
+  const sortedBlockOffsets:BlockOffset[] = sortBlockOffsets(blockOffsets);
+
+  for(let shape of Array.from( SHAPES.keys()) ) {
+    if (isEqual(sortedBlockOffsets, SHAPES.get(shape) || [])) {
+      return shape;
+    }
+  }
+  return 'UNKNOWN';
+};
+
+const createPiece = (gridX:number, gridY:number, blockOffsets:BlockOffset[]):PieceData => {
+  const minX = Math.min(...blockOffsets.map(o => o.x));
+  const minY = Math.min(...blockOffsets.map(o => o.y));
+  const newPiece:PieceData = {
+    gridX: gridX + minX,
+    gridY: gridY + minY,
+    shape: findShape(blockOffsets.map(o => { return { x: o.x - minX, y: o.y - minY } }))
+  };
+  return newPiece;
+};
+
+const calcSmallerPieces = (placedPiece: PieceData, completedGridPositions: GridPos[]):PieceData[] => {
+  const smallerPieces:PieceData[] = [];
+  const pieceBlockOffsets:BlockOffset[] = SHAPES.get(placedPiece.shape) || [];
+  const completedBlockOffsets:BlockOffset[] = toBlockOffsets(placedPiece.gridX, placedPiece.gridY, completedGridPositions);
+  const remainingBlockOffsets:BlockOffset[] = removeCompletedBlockOffsets(pieceBlockOffsets, completedBlockOffsets);
+  const groupedBlockOffsets:BlockOffset[][] = groupBlockOffsetsByNeighbours(remainingBlockOffsets);
+  groupedBlockOffsets.forEach(blockOffsets => {
+    const newPiece:PieceData = createPiece(placedPiece.gridX, placedPiece.gridY, blockOffsets);
+    smallerPieces.push(newPiece);
+  });
+
+  return smallerPieces;
+};
+
+export const removeCompleted = (placedPieces: PieceData[], completed:GridPos[]):PieceData[] => {
+  const newPlacedPieces:PieceData[] = [];
+
+  placedPieces.forEach(placedPiece => {
+    const gridPositions:GridPos[] = shapeToGridPositions(placedPiece.gridX, placedPiece.gridY, placedPiece.shape);
+    const completedGridPositions = gridPositions.filter(gridPos => completed.some(c => c.x === gridPos.x && c.y === gridPos.y));
+
+    if (completedGridPositions.length === 0) {
+      // keep piece as is
+      newPlacedPieces.push(placedPiece);
+    } else if (completedGridPositions.length !== gridPositions.length) {
+      // keep piece as one or more smaller pieces
+      const smallerPieces:PieceData[] = calcSmallerPieces(placedPiece, completedGridPositions);
+      newPlacedPieces.push(...smallerPieces);
+    }
+  });
+  return newPlacedPieces;
 };
