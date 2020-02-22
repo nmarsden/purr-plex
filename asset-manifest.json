@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.css": "/static/css/main.2f85fabe.chunk.css",
-    "main.js": "/static/js/main.8634ac95.chunk.js",
-    "main.js.map": "/static/js/main.8634ac95.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.e9f203f3.js",
-    "runtime-main.js.map": "/static/js/runtime-main.e9f203f3.js.map",
-    "static/js/2.90ac3b45.chunk.js": "/static/js/2.90ac3b45.chunk.js",
-    "static/js/2.90ac3b45.chunk.js.map": "/static/js/2.90ac3b45.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.ad18fbde2052a06ff6894547aeaf32a7.js": "/precache-manifest.ad18fbde2052a06ff6894547aeaf32a7.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/main.2f85fabe.chunk.css.map": "/static/css/main.2f85fabe.chunk.css.map",
-    "static/js/2.90ac3b45.chunk.js.LICENSE.txt": "/static/js/2.90ac3b45.chunk.js.LICENSE.txt"
+    "main.css": "/purr-plex/static/css/main.2f85fabe.chunk.css",
+    "main.js": "/purr-plex/static/js/main.8634ac95.chunk.js",
+    "main.js.map": "/purr-plex/static/js/main.8634ac95.chunk.js.map",
+    "runtime-main.js": "/purr-plex/static/js/runtime-main.d157491d.js",
+    "runtime-main.js.map": "/purr-plex/static/js/runtime-main.d157491d.js.map",
+    "static/js/2.90ac3b45.chunk.js": "/purr-plex/static/js/2.90ac3b45.chunk.js",
+    "static/js/2.90ac3b45.chunk.js.map": "/purr-plex/static/js/2.90ac3b45.chunk.js.map",
+    "index.html": "/purr-plex/index.html",
+    "precache-manifest.4230712bc7c64000034ebbb70a4fc15d.js": "/purr-plex/precache-manifest.4230712bc7c64000034ebbb70a4fc15d.js",
+    "service-worker.js": "/purr-plex/service-worker.js",
+    "static/css/main.2f85fabe.chunk.css.map": "/purr-plex/static/css/main.2f85fabe.chunk.css.map",
+    "static/js/2.90ac3b45.chunk.js.LICENSE.txt": "/purr-plex/static/js/2.90ac3b45.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.e9f203f3.js",
+    "static/js/runtime-main.d157491d.js",
     "static/js/2.90ac3b45.chunk.js",
     "static/css/main.2f85fabe.chunk.css",
     "static/js/main.8634ac95.chunk.js"
