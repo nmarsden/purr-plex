@@ -1,8 +1,9 @@
 import React, { FunctionComponent } from 'react';
 import styles from './Score.module.scss';
 import { useGameDimensions } from '../gameDimensionsProvider/GameDimensionsProvider';
+import CountUp from 'react-countup';
 
-const Score: FunctionComponent<any> = ({ value }) => {
+const Score: FunctionComponent<any> = ({ previousScore, currentScore }) => {
   const gameDimensions = useGameDimensions();
   const headerHeight = gameDimensions.headerHeight;
   const cellSize = gameDimensions.cellSize;
@@ -16,7 +17,9 @@ const Score: FunctionComponent<any> = ({ value }) => {
 
   return (
     <div className={styles.container} style={containerInlineStyles}>
-      <div style={valueInlineStyles}>{value}</div>
+      <div style={valueInlineStyles}>
+        <CountUp start={previousScore} end={currentScore} duration={1}/>
+      </div>
     </div>
   );
 };

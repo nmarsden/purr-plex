@@ -4,6 +4,7 @@ import Grid from './components/grid/Grid';
 import DraggablePiece from './components/draggablePiece/DraggablePiece';
 import {
   calcCompleted,
+  CalcCompletedResult,
   calculatePlaceable,
   pickRandomShape,
   PieceData,
@@ -29,6 +30,7 @@ function App() {
   const [hoverPiece, setHoverPiece] = useState<PieceData | null>();
   const [completedBlocks, setCompletedBlocks] = useState<PieceData[]>([]);
   const [nextShape, setNextShape] = useState<string>(initialShape);
+  const [previousScore, setPreviousScore] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
 
   const isPlaceable = (isInsideGrid:boolean, gridX:number, gridY:number): boolean => {
@@ -49,6 +51,25 @@ function App() {
     }
   };
 
+  const updatePlacedPieces = (newPlacedPiece:PieceData, placedPieces:PieceData[], { completedGridPositions }:CalcCompletedResult) => {
+    let newPlacedPieces = [...placedPieces, newPlacedPiece];
+
+    if (completedGridPositions.length > 0) {
+      // TODO have removeCompleted also return completedPieces instead of using a '1B' for each completedGridPositions
+      newPlacedPieces = removeCompleted(newPlacedPiece, placedPieces, completedGridPositions);
+    }
+    setPlacedPieces(newPlacedPieces);
+
+    return newPlacedPieces;
+  };
+
+  const updateCompletedBlocks = ({ completedGridPositions }:CalcCompletedResult) => {
+    if (completedGridPositions.length > 0) {
+      setCompletedBlocks(completedGridPositions.map(p => { return { gridX:p.x, gridY:p.y, shape:'1B' }}));
+      window.setTimeout(() => { setCompletedBlocks([])}, 500);
+    }
+  };
+
   const calcPoints = (placedBlocksKeptCount:number, completedRegionCount:number) => {
     let points = placedBlocksKeptCount;
     let pointsPerBlockCompleted = (completedRegionCount <= 2) ? 2 : 4;
@@ -56,26 +77,20 @@ function App() {
     return points;
   };
 
+  const updateScore = ({ placedBlocksKeptCount, completedRegionCount }:CalcCompletedResult) => {
+    setPreviousScore(score);
+    const points = calcPoints(placedBlocksKeptCount, completedRegionCount);
+    setScore(score + points);
+  };
+
   const onPieceDragStop = ({ isInsideGrid, gridX, gridY, shape }:any) => {
     if (isPlaceable(isInsideGrid, gridX, gridY)) {
-      const placedPiece = { gridX, gridY, shape };
-      let newPlacedPieces = [...placedPieces, placedPiece];
+      const newPlacedPiece = { gridX, gridY, shape };
 
-      const completed = calcCompleted(placedPiece, newPlacedPieces);
-      if (completed.completedGridPositions.length > 0) {
-        // TODO have removeCompleted also return completedPieces instead of using a '1B' for each completedGridPositions
-        newPlacedPieces = removeCompleted(newPlacedPieces, completed.completedGridPositions);
-        setCompletedBlocks(completed.completedGridPositions.map(p => { return { gridX:p.x, gridY:p.y, shape:'1B' }}));
-        window.setTimeout(() => { setCompletedBlocks([])}, 500);
-      }
-
-      setPlacedPieces(newPlacedPieces);
-
-      const points = calcPoints(completed.placedBlocksKeptCount, completed.completedRegionCount);
-      setScore(score + points);
-
-      // console.log('completed', completed, 'points', points);
-
+      const completed = calcCompleted(newPlacedPiece, placedPieces);
+      const newPlacedPieces = updatePlacedPieces(newPlacedPiece, placedPieces, completed);
+      updateCompletedBlocks(completed);
+      updateScore(completed);
       updateNextShape(newPlacedPieces);
     }
     setHoverPiece(null);
@@ -84,7 +99,7 @@ function App() {
   return (
     <GameDimensionsProvider>
       <div>
-        <Score value={score}/>
+        <Score previousScore={previousScore} currentScore={score}/>
         <Grid placedPieces={placedPieces} hoverPiece={hoverPiece} completedBlocks={completedBlocks}/>
         <DraggablePiece shape={nextShape} onDrag={onPieceDrag} onDragStop={onPieceDragStop}/>
       </div>

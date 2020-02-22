@@ -188,16 +188,22 @@ export const calculatePlaceable = (shape:string, placedPieces:PieceData[]):boole
   return placeable;
 };
 
-export const calcCompleted = ({ gridX, gridY, shape }:PieceData, placedPieces: PieceData[]):
-  { completedGridPositions:GridPos[], completedRegionCount:number, placedBlocksKeptCount:number } => {
+export interface CalcCompletedResult {
+  completedGridPositions:GridPos[],
+  completedRegionCount:number,
+  placedBlocksKeptCount:number
+}
+
+export const calcCompleted = (newPlacedPiece:PieceData, placedPieces: PieceData[]): CalcCompletedResult => {
 
   const completedGridPositions:GridPos[] = [];
   const indices:number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-  const occupied:boolean[][] = calculateOccupied(placedPieces);
+  const occupied:boolean[][] = calculateOccupied([...placedPieces, newPlacedPiece]);
   const completedColumnIndex:number[] = [];
   const completedRowIndex:number[] = [];
   const completed3x3Index:number[] = [];
   let completedRegionCount = 0;
+  const placedPieceGridPositions:GridPos[] = shapeToGridPositions(newPlacedPiece.gridX, newPlacedPiece.gridY, newPlacedPiece.shape);
 
   const getIndex3x3 = (topLeftGridPos:GridPos):number => {
     const row3x3 = Math.floor((topLeftGridPos.y + 1) / 3);
@@ -205,7 +211,7 @@ export const calcCompleted = ({ gridX, gridY, shape }:PieceData, placedPieces: P
     return (3 * col3x3) + row3x3;
   };
 
-  shapeToGridPositions(gridX, gridY, shape).forEach(gridPos => {
+  placedPieceGridPositions.forEach(gridPos => {
     // Check for completed column
     if (!completedColumnIndex.includes(gridPos.x) && occupied[gridPos.x].every(o => o)) {
       const completedColumn:GridPos[] = indices.map(i => { return { x:gridPos.x, y:i }; });
@@ -231,9 +237,8 @@ export const calcCompleted = ({ gridX, gridY, shape }:PieceData, placedPieces: P
   });
 
   // Calc placedBlocksKeptCount
-  const placedShapeGridPositions:GridPos[] = shapeToGridPositions(gridX, gridY, shape);
-  const placedBlocksKept:GridPos[] = placedShapeGridPositions.filter(gridPos => !completedGridPositions.some(c => c.x === gridPos.x && c.y === gridPos.y));
-  const placedBlocksKeptCount = placedBlocksKept.length
+  const placedBlocksKept:GridPos[] = placedPieceGridPositions.filter(gridPos => !completedGridPositions.some(c => c.x === gridPos.x && c.y === gridPos.y));
+  const placedBlocksKeptCount = placedBlocksKept.length;
 
   return {
     completedGridPositions,
@@ -345,10 +350,10 @@ const calcSmallerPieces = (placedPiece: PieceData, completedGridPositions: GridP
   return smallerPieces;
 };
 
-export const removeCompleted = (placedPieces: PieceData[], completed:GridPos[]):PieceData[] => {
+export const removeCompleted = (newPlacedPiece: PieceData, placedPieces: PieceData[], completed:GridPos[]):PieceData[] => {
   const newPlacedPieces:PieceData[] = [];
 
-  placedPieces.forEach(placedPiece => {
+  [...placedPieces, newPlacedPiece].forEach(placedPiece => {
     const gridPositions:GridPos[] = shapeToGridPositions(placedPiece.gridX, placedPiece.gridY, placedPiece.shape);
     const completedGridPositions = gridPositions.filter(gridPos => completed.some(c => c.x === gridPos.x && c.y === gridPos.y));
 
