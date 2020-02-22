@@ -188,29 +188,58 @@ export const calculatePlaceable = (shape:string, placedPieces:PieceData[]):boole
   return placeable;
 };
 
-export const getCompletedGridPositions = ({ gridX, gridY, shape }:PieceData, placedPieces: PieceData[]): GridPos[] => {
-  const completed:GridPos[] = [];
+export const calcCompleted = ({ gridX, gridY, shape }:PieceData, placedPieces: PieceData[]):
+  { completedGridPositions:GridPos[], completedRegionCount:number, placedBlocksKeptCount:number } => {
+
+  const completedGridPositions:GridPos[] = [];
   const indices:number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8];
   const occupied:boolean[][] = calculateOccupied(placedPieces);
+  const completedColumnIndex:number[] = [];
+  const completedRowIndex:number[] = [];
+  const completed3x3Index:number[] = [];
+  let completedRegionCount = 0;
+
+  const getIndex3x3 = (topLeftGridPos:GridPos):number => {
+    const row3x3 = Math.floor((topLeftGridPos.y + 1) / 3);
+    const col3x3 = Math.floor((topLeftGridPos.x + 1) / 3);
+    return (3 * col3x3) + row3x3;
+  };
+
   shapeToGridPositions(gridX, gridY, shape).forEach(gridPos => {
     // Check for completed column
-    if (occupied[gridPos.x].every(o => o)) {
+    if (!completedColumnIndex.includes(gridPos.x) && occupied[gridPos.x].every(o => o)) {
       const completedColumn:GridPos[] = indices.map(i => { return { x:gridPos.x, y:i }; });
-      completed.push(...completedColumn);
+      completedGridPositions.push(...completedColumn);
+      completedRegionCount++;
+      completedColumnIndex.push(gridPos.x);
     }
     // Check for completed row
-    if (indices.every(i => occupied[i][gridPos.y])) {
+    if (!completedRowIndex.includes(gridPos.y) && indices.every(i => occupied[i][gridPos.y])) {
       const completedRow:GridPos[] = indices.map(i => { return { x:i, y:gridPos.y }; });
-      completed.push(...completedRow);
+      completedGridPositions.push(...completedRow);
+      completedRegionCount++;
+      completedRowIndex.push(gridPos.y);
     }
     // Check for completed 3x3
     const gridPositions3x3 = getGridPositions3x3(gridPos);
-    if (gridPositions3x3.every(({x, y}) => occupied[x][y])) {
-      completed.push(...gridPositions3x3);
+    const index3x3 = getIndex3x3(gridPositions3x3[0]);
+    if (!completed3x3Index.includes(index3x3) && gridPositions3x3.every(({x, y}) => occupied[x][y])) {
+      completedGridPositions.push(...gridPositions3x3);
+      completedRegionCount++;
+      completed3x3Index.push(index3x3);
     }
   });
 
-  return completed;
+  // Calc placedBlocksKeptCount
+  const placedShapeGridPositions:GridPos[] = shapeToGridPositions(gridX, gridY, shape);
+  const placedBlocksKept:GridPos[] = placedShapeGridPositions.filter(gridPos => !completedGridPositions.some(c => c.x === gridPos.x && c.y === gridPos.y));
+  const placedBlocksKeptCount = placedBlocksKept.length
+
+  return {
+    completedGridPositions,
+    completedRegionCount,
+    placedBlocksKeptCount
+  };
 };
 
 const toBlockOffsets = (gridX: number, gridY: number, gridPositions: BlockOffset[]) => {

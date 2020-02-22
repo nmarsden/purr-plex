@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import GameDimensionsProvider from './components/gameDimensionsProvider/GameDimensionsProvider';
-import GameHeader from './components/gameHeader/GameHeader';
 import Grid from './components/grid/Grid';
 import DraggablePiece from './components/draggablePiece/DraggablePiece';
 import {
+  calcCompleted,
   calculatePlaceable,
-  getCompletedGridPositions,
   pickRandomShape,
   PieceData,
   removeCompleted,
 } from './components/piece/Piece';
+import Score from './components/score/Score';
 
 const initialShape = pickRandomShape();
 const initialPlacedPieces:PieceData[] = [];
@@ -29,6 +29,7 @@ function App() {
   const [hoverPiece, setHoverPiece] = useState<PieceData | null>();
   const [completedBlocks, setCompletedBlocks] = useState<PieceData[]>([]);
   const [nextShape, setNextShape] = useState<string>(initialShape);
+  const [score, setScore] = useState<number>(0);
 
   const isPlaceable = (isInsideGrid:boolean, gridX:number, gridY:number): boolean => {
     return isInsideGrid && placeable[gridX][gridY];
@@ -47,20 +48,34 @@ function App() {
       setHoverPiece(null);
     }
   };
+
+  const calcPoints = (placedBlocksKeptCount:number, completedRegionCount:number) => {
+    let points = placedBlocksKeptCount;
+    let pointsPerBlockCompleted = (completedRegionCount <= 2) ? 2 : 4;
+    points += (completedRegionCount * 9 * pointsPerBlockCompleted);
+    return points;
+  };
+
   const onPieceDragStop = ({ isInsideGrid, gridX, gridY, shape }:any) => {
     if (isPlaceable(isInsideGrid, gridX, gridY)) {
       const placedPiece = { gridX, gridY, shape };
       let newPlacedPieces = [...placedPieces, placedPiece];
 
-      const completedGridPositions = getCompletedGridPositions(placedPiece, newPlacedPieces);
-      if (completedGridPositions.length > 0) {
+      const completed = calcCompleted(placedPiece, newPlacedPieces);
+      if (completed.completedGridPositions.length > 0) {
         // TODO have removeCompleted also return completedPieces instead of using a '1B' for each completedGridPositions
-        newPlacedPieces = removeCompleted(newPlacedPieces, completedGridPositions);
-        setCompletedBlocks(completedGridPositions.map(p => { return { gridX:p.x, gridY:p.y, shape:'1B' }}));
+        newPlacedPieces = removeCompleted(newPlacedPieces, completed.completedGridPositions);
+        setCompletedBlocks(completed.completedGridPositions.map(p => { return { gridX:p.x, gridY:p.y, shape:'1B' }}));
         window.setTimeout(() => { setCompletedBlocks([])}, 500);
       }
 
       setPlacedPieces(newPlacedPieces);
+
+      const points = calcPoints(completed.placedBlocksKeptCount, completed.completedRegionCount);
+      setScore(score + points);
+
+      // console.log('completed', completed, 'points', points);
+
       updateNextShape(newPlacedPieces);
     }
     setHoverPiece(null);
@@ -69,7 +84,7 @@ function App() {
   return (
     <GameDimensionsProvider>
       <div>
-        <GameHeader/>
+        <Score value={score}/>
         <Grid placedPieces={placedPieces} hoverPiece={hoverPiece} completedBlocks={completedBlocks}/>
         <DraggablePiece shape={nextShape} onDrag={onPieceDrag} onDragStop={onPieceDragStop}/>
       </div>
