@@ -4,49 +4,58 @@ import styles from './Piece.module.scss';
 import { useGameDimensions } from '../gameDimensionsProvider/GameDimensionsProvider';
 import Block from '../block/Block';
 
+type BlockType = '1a' | '1b' | '1c'| '1d' | '2a' | '2b' | '2c'| '2d'| '2e' | '2f' | '3a' | '3b' | '3c' | '3d' | '4a';
+
 interface BlockOffset {
   x: number,
   y: number
 }
+
+interface BlockData {
+  offset:BlockOffset,
+  type:BlockType
+}
+
 // SHAPES: each shape has an associated array of BlockOffset which is ordered by x ascending and then y ascending
-const SHAPES:Map<string, Array<BlockOffset>> = new Map([
-  ['1B',      [{x:0,y:0}]],
-  ['2B_I_1',  [{x:0,y:0}, {x:1,y:0}]],
-  ['2B_I_2',  [{x:0,y:0}, {x:0,y:1}]],
-  ['3B_I_1',  [{x:0,y:0}, {x:1,y:0}, {x:2,y:0}]],
-  ['3B_I_2',  [{x:0,y:0}, {x:0,y:1}, {x:0,y:2}]],
-  ['3B_L_1',  [{x:0,y:1}, {x:1,y:0}, {x:1,y:1}]],
-  ['3B_L_2',  [{x:0,y:0}, {x:1,y:0}, {x:1,y:1}]],
-  ['3B_L_3',  [{x:0,y:0}, {x:0,y:1}, {x:1,y:0}]],
-  ['3B_L_4',  [{x:0,y:0}, {x:0,y:1}, {x:1,y:1}]],
-  ['4B_O',    [{x:0,y:0}, {x:0,y:1}, {x:1,y:0}, {x:1,y:1}]],
-  ['4B_L_1',  [{x:0,y:1}, {x:1,y:1}, {x:2,y:0}, {x:2,y:1}]],
-  ['4B_L_2',  [{x:0,y:0}, {x:1,y:0}, {x:1,y:1}, {x:1,y:2}]],
-  ['4B_L_3',  [{x:0,y:0}, {x:0,y:1}, {x:1,y:0}, {x:2,y:0}]],
-  ['4B_L_4',  [{x:0,y:0}, {x:0,y:1}, {x:0,y:2}, {x:1,y:2}]],
-  ['4B_J_1',  [{x:0,y:0}, {x:1,y:0}, {x:2,y:0}, {x:2,y:1}]],
-  ['4B_J_2',  [{x:0,y:2}, {x:1,y:0}, {x:1,y:1}, {x:1,y:2}]],
-  ['4B_J_3',  [{x:0,y:0}, {x:0,y:1}, {x:1,y:1}, {x:2,y:1}]],
-  ['4B_J_4',  [{x:0,y:0}, {x:0,y:1}, {x:0,y:2}, {x:1,y:0}]],
-  ['4B_Z_1',  [{x:0,y:1}, {x:0,y:2}, {x:1,y:0}, {x:1,y:1}]],
-  ['4B_Z_2',  [{x:0,y:0}, {x:1,y:0}, {x:1,y:1}, {x:2,y:1}]],
-  ['4B_S_1',  [{x:0,y:0}, {x:0,y:1}, {x:1,y:1}, {x:1,y:2}]],
-  ['4B_S_2',  [{x:0,y:1}, {x:1,y:0}, {x:1,y:1}, {x:2,y:0}]],
-  ['4B_T_1',  [{x:0,y:1}, {x:1,y:0}, {x:1,y:1}, {x:1,y:2}]],
-  ['4B_T_2',  [{x:0,y:1}, {x:1,y:0}, {x:1,y:1}, {x:1,y:2}]],
-  ['4B_T_3',  [{x:0,y:0}, {x:1,y:0}, {x:1,y:1}, {x:2,y:0}]],
-  ['4B_T_4',  [{x:0,y:0}, {x:0,y:1}, {x:0,y:2}, {x:1,y:1}]],
-  ['4B_I_1',  [{x:0,y:0}, {x:1,y:0}, {x:2,y:0}, {x:3,y:0}]],
-  ['4B_I_2',  [{x:0,y:0}, {x:0,y:1}, {x:0,y:2}, {x:0,y:3}]],
+const SHAPES:Map<string, Array<BlockData>> = new Map([
+  ['1B',      [{offset:{x:0,y:0},type:'4a'}]],
+  ['2B_I_1',  [{offset:{x:0,y:0},type:'3c'}, {offset:{x:1,y:0},type:'3a'}]],
+  ['2B_I_2',  [{offset:{x:0,y:0},type:'3d'}, {offset:{x:0,y:1},type:'3b'}]],
+  ['3B_I_1',  [{offset:{x:0,y:0},type:'3c'}, {offset:{x:1,y:0},type:'2e'}, {offset:{x:2,y:0},type:'3a'}]],
+  ['3B_I_2',  [{offset:{x:0,y:0},type:'3d'}, {offset:{x:0,y:1},type:'2f'}, {offset:{x:0,y:2},type:'3b'}]],
+  ['3B_L_1',  [{offset:{x:0,y:1},type:'3c'}, {offset:{x:1,y:0},type:'3d'}, {offset:{x:1,y:1},type:'2b'}]],
+  ['3B_L_2',  [{offset:{x:0,y:0},type:'3c'}, {offset:{x:1,y:0},type:'2a'}, {offset:{x:1,y:1},type:'3b'}]],
+  ['3B_L_3',  [{offset:{x:0,y:0},type:'2d'}, {offset:{x:0,y:1},type:'3b'}, {offset:{x:1,y:0},type:'3a'}]],
+  ['3B_L_4',  [{offset:{x:0,y:0},type:'3d'}, {offset:{x:0,y:1},type:'2c'}, {offset:{x:1,y:1},type:'3a'}]],
+  ['4B_O',    [{offset:{x:0,y:0},type:'2d'}, {offset:{x:0,y:1},type:'2c'}, {offset:{x:1,y:0},type:'2a'}, {offset:{x:1,y:1},type:'2b'}]],
+  ['4B_L_1',  [{offset:{x:0,y:1},type:'3c'}, {offset:{x:1,y:1},type:'2e'}, {offset:{x:2,y:0},type:'3d'}, {offset:{x:2,y:1},type:'2b'}]],
+  ['4B_L_2',  [{offset:{x:0,y:0},type:'3c'}, {offset:{x:1,y:0},type:'2a'}, {offset:{x:1,y:1},type:'2f'}, {offset:{x:1,y:2},type:'3b'}]],
+  ['4B_L_3',  [{offset:{x:0,y:0},type:'2d'}, {offset:{x:0,y:1},type:'3b'}, {offset:{x:1,y:0},type:'2e'}, {offset:{x:2,y:0},type:'3a'}]],
+  ['4B_L_4',  [{offset:{x:0,y:0},type:'3d'}, {offset:{x:0,y:1},type:'2f'}, {offset:{x:0,y:2},type:'2c'}, {offset:{x:1,y:2},type:'3a'}]],
+  ['4B_J_1',  [{offset:{x:0,y:0},type:'3c'}, {offset:{x:1,y:0},type:'2e'}, {offset:{x:2,y:0},type:'2a'}, {offset:{x:2,y:1},type:'3b'}]],
+  ['4B_J_2',  [{offset:{x:0,y:2},type:'3c'}, {offset:{x:1,y:0},type:'3d'}, {offset:{x:1,y:1},type:'2f'}, {offset:{x:1,y:2},type:'2b'}]],
+  ['4B_J_3',  [{offset:{x:0,y:0},type:'3d'}, {offset:{x:0,y:1},type:'2c'}, {offset:{x:1,y:1},type:'2e'}, {offset:{x:2,y:1},type:'3a'}]],
+  ['4B_J_4',  [{offset:{x:0,y:0},type:'2d'}, {offset:{x:0,y:1},type:'2f'}, {offset:{x:0,y:2},type:'3b'}, {offset:{x:1,y:0},type:'3a'}]],
+  ['4B_Z_1',  [{offset:{x:0,y:1},type:'2d'}, {offset:{x:0,y:2},type:'3b'}, {offset:{x:1,y:0},type:'3d'}, {offset:{x:1,y:1},type:'2b'}]],
+  ['4B_Z_2',  [{offset:{x:0,y:0},type:'3c'}, {offset:{x:1,y:0},type:'2a'}, {offset:{x:1,y:1},type:'2c'}, {offset:{x:2,y:1},type:'3a'}]],
+  ['4B_S_1',  [{offset:{x:0,y:0},type:'3d'}, {offset:{x:0,y:1},type:'2c'}, {offset:{x:1,y:1},type:'2a'}, {offset:{x:1,y:2},type:'3b'}]],
+  ['4B_S_2',  [{offset:{x:0,y:1},type:'3c'}, {offset:{x:1,y:0},type:'2d'}, {offset:{x:1,y:1},type:'2b'}, {offset:{x:2,y:0},type:'3a'}]],
+  ['4B_T_1',  [{offset:{x:0,y:1},type:'3c'}, {offset:{x:1,y:0},type:'3d'}, {offset:{x:1,y:1},type:'1c'}, {offset:{x:2,y:1},type:'3a'}]],
+  ['4B_T_2',  [{offset:{x:0,y:1},type:'3c'}, {offset:{x:1,y:0},type:'3d'}, {offset:{x:1,y:1},type:'1b'}, {offset:{x:1,y:2},type:'3b'}]],
+  ['4B_T_3',  [{offset:{x:0,y:0},type:'3c'}, {offset:{x:1,y:0},type:'1a'}, {offset:{x:1,y:1},type:'3b'}, {offset:{x:2,y:0},type:'3a'}]],
+  ['4B_T_4',  [{offset:{x:0,y:0},type:'3d'}, {offset:{x:0,y:1},type:'1d'}, {offset:{x:0,y:2},type:'3b'}, {offset:{x:1,y:1},type:'3a'}]],
+  ['4B_I_1',  [{offset:{x:0,y:0},type:'3c'}, {offset:{x:1,y:0},type:'2e'}, {offset:{x:2,y:0},type:'2e'}, {offset:{x:3,y:0},type:'3a'}]],
+  ['4B_I_2',  [{offset:{x:0,y:0},type:'3d'}, {offset:{x:0,y:1},type:'2f'}, {offset:{x:0,y:2},type:'2f'}, {offset:{x:0,y:3},type:'3b'}]],
 ]);
 
 const shapeToBlocks = (x:number, y:number, size:number, shape:string, isPreDragging:boolean, isDragging:boolean, isMuted:boolean) => {
-  const blockOffsets:Array<BlockOffset> = SHAPES.get(shape) || [];
-  return blockOffsets.map( (o, i) =>
+  const blockData:BlockData[] = SHAPES.get(shape) || [];
+  return blockData.map( (b, i) =>
     <Block key={i}
-           x={x+(o.x * size)}
-           y={y+(o.y * size)}
+           x={x+(b.offset.x * size)}
+           y={y+(b.offset.y * size)}
            size={size}
+           blockType={isDragging ? '4a' : b.type}
            isPreDragging={isPreDragging}
            isDragging={isDragging}
            isMuted={isMuted}
@@ -54,8 +63,8 @@ const shapeToBlocks = (x:number, y:number, size:number, shape:string, isPreDragg
 };
 
 export const shapeToGridPositions = (gridX:number, gridY:number, shape:string):Array<GridPos> => {
-  const blockOffsets:Array<BlockOffset> = SHAPES.get(shape) || [];
-  return blockOffsets.map(o => { return { x: gridX + o.x, y: gridY + o.y } });
+  const blockData:BlockData[] = SHAPES.get(shape) || [];
+  return blockData.map(b => { return { x: gridX + b.offset.x, y: gridY + b.offset.y } });
 };
 
 const getGridPositions3x3 = (gridPos:GridPos):GridPos[] => {
@@ -97,7 +106,7 @@ let cx = classNames.bind(styles);
 const Piece: FunctionComponent<any> = ({ x, y, shape, isDraggable, isPreDragging, isDragging, isMuted, isCompleted }) => {
   const gameDimensions = useGameDimensions();
   const cellSize = gameDimensions.cellSize;
-  const blockSize = (isDraggable && !isDragging) ? (cellSize/2) : cellSize;
+  const blockSize = (isDraggable && !isDragging) ? Math.floor(cellSize/2) : cellSize;
   const blocks = shapeToBlocks(cellSize * x, cellSize * y, blockSize, shape, isPreDragging, isDragging, isMuted);
 
   const shapeDims = shapeDimensions(shape, cellSize);
@@ -141,7 +150,9 @@ export const pickRandomShape = ():string => { return Array.from(SHAPES.keys())[M
 // export const pickRandomShape = ():string => { return '3B_I_1' };
 
 export const shapeDimensions = (shape:string, blockSize:number) => {
-  const blockOffsets:Array<BlockOffset> = SHAPES.get(shape) || [];
+  const blockData:BlockData[] = SHAPES.get(shape) || [];
+  const blockOffsets:BlockOffset[] = blockData.map(b => b.offset);
+
   let minX = blockOffsets[0].x;
   let minY = blockOffsets[0].y;
   let maxX = blockOffsets[0].x;
@@ -268,7 +279,10 @@ const findShape = (blockOffsets: BlockOffset[]):string => {
   const sortedBlockOffsets:BlockOffset[] = sortBlockOffsets(blockOffsets);
 
   for(let shape of Array.from( SHAPES.keys()) ) {
-    if (isEqual(sortedBlockOffsets, SHAPES.get(shape) || [])) {
+    const blockData:BlockData[] = SHAPES.get(shape) || [];
+    const blockOffsets:BlockOffset[] = blockData.map(b => b.offset);
+
+    if (isEqual(sortedBlockOffsets, blockOffsets)) {
       return shape;
     }
   }
@@ -288,7 +302,9 @@ const createPiece = (gridX:number, gridY:number, blockOffsets:BlockOffset[]):Pie
 
 const calcSmallerPieces = (placedPiece: PieceData, completedGridPositions: GridPos[]):PieceData[] => {
   const smallerPieces:PieceData[] = [];
-  const pieceBlockOffsets:BlockOffset[] = SHAPES.get(placedPiece.shape) || [];
+  const blockData:BlockData[] = SHAPES.get(placedPiece.shape) || [];
+  const pieceBlockOffsets:BlockOffset[] = blockData.map(b => b.offset);
+
   const completedBlockOffsets:BlockOffset[] = toBlockOffsets(placedPiece.gridX, placedPiece.gridY, completedGridPositions);
   const remainingBlockOffsets:BlockOffset[] = removeCompletedBlockOffsets(pieceBlockOffsets, completedBlockOffsets);
   const groupedBlockOffsets:BlockOffset[][] = groupBlockOffsetsByNeighbours(remainingBlockOffsets);

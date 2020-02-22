@@ -1,13 +1,48 @@
 $block-colour: #5bb8ff;
 $block-dragging-colour: #64d3ff;
 $block-muted-colour: #dedede;
-$block-border-colour: #343434;
+$block-border-soft-colour: #64d3ff;
+$block-border-hard-colour: #000000;
 
 .block {
   position: absolute;
   background-color: $block-colour;
-  border: thin solid $block-border-colour;
+  border: thin solid $block-border-soft-colour;
 }
+
+@mixin border-hard($top, $right, $bottom, $left) {
+  @if ($top > 0) {
+    border-top: thin solid $block-border-hard-colour;
+  }
+  @if ($right > 0) {
+    border-right: thin solid $block-border-hard-colour;
+  }
+  @if ($bottom > 0) {
+    border-bottom: thin solid $block-border-hard-colour;
+  }
+  @if ($left > 0) {
+    border-left: thin solid $block-border-hard-colour;
+  }
+}
+
+.type1a { @include border-hard(1, 0, 0, 0); }
+.type1b { @include border-hard(0, 1, 0, 0); }
+.type1c { @include border-hard(0, 0, 1, 0); }
+.type1d { @include border-hard(0, 0, 0, 1); }
+
+.type2a { @include border-hard(1, 1, 0, 0); }
+.type2b { @include border-hard(0, 1, 1, 0); }
+.type2c { @include border-hard(0, 0, 1, 1); }
+.type2d { @include border-hard(1, 0, 0, 1); }
+.type2e { @include border-hard(1, 0, 1, 0); }
+.type2f { @include border-hard(0, 1, 0, 1); }
+
+.type3a { @include border-hard(1, 1, 1, 0); }
+.type3b { @include border-hard(0, 1, 1, 1); }
+.type3c { @include border-hard(1, 0, 1, 1); }
+.type3d { @include border-hard(1, 1, 0, 1); }
+
+.type4a { @include border-hard(1, 1, 1, 1); }
 
 .isPreDragging {
   transition: width 100ms, height 100ms;
