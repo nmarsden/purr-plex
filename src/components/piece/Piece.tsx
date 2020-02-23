@@ -48,7 +48,7 @@ const SHAPES:Map<string, Array<BlockData>> = new Map([
   ['4B_I_2',  [{offset:{x:0,y:0},type:'3d'}, {offset:{x:0,y:1},type:'2f'}, {offset:{x:0,y:2},type:'2f'}, {offset:{x:0,y:3},type:'3b'}]],
 ]);
 
-const shapeToBlocks = (x:number, y:number, size:number, shape:string, isPreDragging:boolean, isDragging:boolean, isMuted:boolean) => {
+const shapeToBlocks = (x:number, y:number, size:number, shape:string, isPreDragging:boolean, isDragging:boolean, isMuted:boolean, isCompletable:boolean) => {
   const blockData:BlockData[] = SHAPES.get(shape) || [];
   return blockData.map( (b, i) =>
     <Block key={i}
@@ -59,6 +59,7 @@ const shapeToBlocks = (x:number, y:number, size:number, shape:string, isPreDragg
            isPreDragging={isPreDragging}
            isDragging={isDragging}
            isMuted={isMuted}
+           isCompletable={isCompletable}
     />);
 };
 
@@ -103,11 +104,11 @@ const calculateOccupied = (placedPieces:PieceData[]):boolean[][] => {
 
 let cx = classNames.bind(styles);
 
-const Piece: FunctionComponent<any> = ({ x, y, shape, isDraggable, isPreDragging, isDragging, isMuted, isCompleted }) => {
+const Piece: FunctionComponent<any> = ({ x, y, shape, isDraggable, isPreDragging, isDragging, isMuted, isCompletable, isCompleted }) => {
   const gameDimensions = useGameDimensions();
   const cellSize = gameDimensions.cellSize;
   const blockSize = (isDraggable && !isDragging) ? Math.floor(cellSize/2) : cellSize;
-  const blocks = shapeToBlocks(cellSize * x, cellSize * y, blockSize, shape, isPreDragging, isDragging, isMuted);
+  const blocks = shapeToBlocks(cellSize * x, cellSize * y, blockSize, shape, isPreDragging, isDragging, isMuted, isCompletable);
 
   const shapeDims = shapeDimensions(shape, cellSize);
   let inlineStyles = {

@@ -3,7 +3,7 @@ import styles from './Grid.module.scss';
 import { useGameDimensions } from '../gameDimensionsProvider/GameDimensionsProvider';
 import Piece, { PieceData } from '../piece/Piece';
 
-const Grid: FunctionComponent<any> = ({ placedPieces, hoverPiece, completedBlocks }) => {
+const Grid: FunctionComponent<any> = ({ placedPieces, hoverPiece, completableBlocks, completedBlocks }) => {
   const cellTypes = [
     'OOOXXXOOO',
     'OOOXXXOOO',
@@ -43,7 +43,8 @@ const Grid: FunctionComponent<any> = ({ placedPieces, hoverPiece, completedBlock
       {rows}
       {placedPieces.map( (p:PieceData, i:number) => <Piece key={i} x={p.gridX} y={p.gridY} shape={p.shape}/>)}
       {hoverPiece && <Piece key={999} x={hoverPiece.gridX} y={hoverPiece.gridY} shape={hoverPiece.shape} isMuted={true}/>}
-      {completedBlocks.map( (p:PieceData, i:number) => <Piece key={100+i} x={p.gridX} y={p.gridY} shape={p.shape} isCompleted={true}/>)}
+      {completableBlocks.map( (p:PieceData, i:number) => <Piece key={100+i} x={p.gridX} y={p.gridY} shape={p.shape} isCompletable={true}/>)}
+      {completedBlocks.map( (p:PieceData, i:number) => <Piece key={200+i} x={p.gridX} y={p.gridY} shape={p.shape} isCompleted={true}/>)}
     </div>
   );
 };

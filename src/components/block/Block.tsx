@@ -4,7 +4,7 @@ import styles from './Block.module.scss';
 
 let cx = classNames.bind(styles);
 
-const Block: FunctionComponent<any> = ({ x, y, size, blockType, isPreDragging, isDragging, isMuted }) => {
+const Block: FunctionComponent<any> = ({ x, y, size, blockType, isPreDragging, isDragging, isMuted, isCompletable }) => {
   const inlineStyles = {
     width: `${size + 1}px`,
     height: `${size + 1}px`,
@@ -17,7 +17,8 @@ const Block: FunctionComponent<any> = ({ x, y, size, blockType, isPreDragging, i
     [`type${blockType}`]: true,
     isPreDragging: isPreDragging,
     isDragging: isDragging,
-    isMuted: isMuted
+    isMuted: isMuted,
+    isCompletable: isCompletable
   });
 
   return (

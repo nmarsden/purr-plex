@@ -25,12 +25,13 @@ const initialPlacedPieces:PieceData[] = [];
 //   { gridX: 2, gridY: 6, shape: '3B_I_2' }
 // ];
 
-let placeable:boolean[][] = calculatePlaceable(initialShape, []);
+let placeable:boolean[][] = calculatePlaceable(initialShape, initialPlacedPieces);
 
 function App() {
   const [placedPieces, setPlacedPieces] = useState<PieceData[]>(initialPlacedPieces);
   const [hoverPiece, setHoverPiece] = useState<PieceData | null>();
   const [completedBlocks, setCompletedBlocks] = useState<PieceData[]>([]);
+  const [completableBlocks, setCompletableBlocks] = useState<PieceData[]>([]);
   const [nextShape, setNextShape] = useState<string>(initialShape);
   const [previousScore, setPreviousScore] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
@@ -46,14 +47,6 @@ function App() {
     placeable = calculatePlaceable(shape, placedPieces);
   };
 
-  const onPieceDrag = ({ isInsideGrid, gridX, gridY, shape }:any) => {
-    if (isPlaceable(isInsideGrid, gridX, gridY)) {
-      setHoverPiece({ gridX, gridY, shape });
-    } else {
-      setHoverPiece(null);
-    }
-  };
-
   const updatePlacedPieces = (newPlacedPiece:PieceData, placedPieces:PieceData[], { completedGridPositions }:CalcCompletedResult) => {
     let newPlacedPieces = [...placedPieces, newPlacedPiece];
 
@@ -66,9 +59,13 @@ function App() {
     return newPlacedPieces;
   };
 
+  const toBlocks = (gridPositions:GridPos[]):PieceData[] => {
+    return gridPositions.map(p => { return { gridX:p.x, gridY:p.y, shape:'1B' }})
+  };
+
   const updateCompletedBlocks = ({ completedGridPositions }:CalcCompletedResult) => {
     if (completedGridPositions.length > 0) {
-      setCompletedBlocks(completedGridPositions.map(p => { return { gridX:p.x, gridY:p.y, shape:'1B' }}));
+      setCompletedBlocks(toBlocks(completedGridPositions));
       window.setTimeout(() => { setCompletedBlocks([])}, 500);
     }
   };
@@ -100,6 +97,18 @@ function App() {
     }
   };
 
+  const onPieceDrag = ({ isInsideGrid, gridX, gridY, shape }:any) => {
+    if (isPlaceable(isInsideGrid, gridX, gridY)) {
+      const placeablePiece = { gridX, gridY, shape };
+      const completable = calcCompleted(placeablePiece, placedPieces);
+      setCompletableBlocks(toBlocks(completable.completedGridPositions));
+      setHoverPiece(placeablePiece);
+    } else {
+      setCompletableBlocks([]);
+      setHoverPiece(null);
+    }
+  };
+
   const onPieceDragStop = ({ isInsideGrid, gridX, gridY, shape }:any) => {
     if (isPlaceable(isInsideGrid, gridX, gridY)) {
       const newPlacedPiece = { gridX, gridY, shape };
@@ -110,6 +119,7 @@ function App() {
       updateScore(completed);
       updateNextShape(newPlacedPieces);
     }
+    setCompletableBlocks([]);
     setHoverPiece(null);
   };
 
@@ -117,7 +127,7 @@ function App() {
     <GameDimensionsProvider>
       <div>
         <Score previousScore={previousScore} currentScore={score}/>
-        <Grid placedPieces={placedPieces} hoverPiece={hoverPiece} completedBlocks={completedBlocks}/>
+        <Grid placedPieces={placedPieces} hoverPiece={hoverPiece} completableBlocks={completableBlocks} completedBlocks={completedBlocks}/>
         <DraggablePiece shape={nextShape} onDrag={onPieceDrag} onDragStop={onPieceDragStop}/>
         <PointsMessage pointsMessageData={pointsMessageData}/>
       </div>
