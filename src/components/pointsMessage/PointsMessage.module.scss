@@ -1,0 +1,22 @@
+.container {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.points {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transform: scale(0);
+  animation: flash linear 2s;
+}
+
+@keyframes flash {
+  0%   { opacity: 0; transform: scale(0) }
+  20%  { opacity: 1; transform: scale(1) }
+  100% { opacity: 0; transform: scale(1) }
+}

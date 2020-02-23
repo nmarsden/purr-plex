@@ -191,6 +191,7 @@ export const calculatePlaceable = (shape:string, placedPieces:PieceData[]):boole
 export interface CalcCompletedResult {
   completedGridPositions:GridPos[],
   completedRegionCount:number,
+  completedRegionCenter:GridPos,
   placedBlocksKeptCount:number
 }
 
@@ -204,6 +205,17 @@ export const calcCompleted = (newPlacedPiece:PieceData, placedPieces: PieceData[
   const completed3x3Index:number[] = [];
   let completedRegionCount = 0;
   const placedPieceGridPositions:GridPos[] = shapeToGridPositions(newPlacedPiece.gridX, newPlacedPiece.gridY, newPlacedPiece.shape);
+
+  const calcCompletedRegionCenter = (completedGridPositions:GridPos[]):GridPos => {
+    const xPositions = completedGridPositions.map(p => p.x);
+    const yPositions = completedGridPositions.map(p => p.y);
+    const minX = Math.min(...xPositions);
+    const maxX = Math.max(...xPositions);
+    const minY = Math.min(...yPositions);
+    const maxY = Math.max(...yPositions);
+
+    return { x: Math.floor(minX + (maxX - minX)/2), y: Math.floor(minY + (maxY - minY)/2) };
+  };
 
   const getIndex3x3 = (topLeftGridPos:GridPos):number => {
     const row3x3 = Math.floor((topLeftGridPos.y + 1) / 3);
@@ -240,9 +252,13 @@ export const calcCompleted = (newPlacedPiece:PieceData, placedPieces: PieceData[
   const placedBlocksKept:GridPos[] = placedPieceGridPositions.filter(gridPos => !completedGridPositions.some(c => c.x === gridPos.x && c.y === gridPos.y));
   const placedBlocksKeptCount = placedBlocksKept.length;
 
+  // Calc completedRegionCenter
+  const completedRegionCenter = calcCompletedRegionCenter(completedGridPositions);
+
   return {
     completedGridPositions,
     completedRegionCount,
+    completedRegionCenter,
     placedBlocksKeptCount
   };
 };
