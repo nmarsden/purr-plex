@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/purr-plex/static/css/main.a8c07f21.chunk.css",
-    "main.js": "/purr-plex/static/js/main.f30a2c21.chunk.js",
-    "main.js.map": "/purr-plex/static/js/main.f30a2c21.chunk.js.map",
+    "main.css": "/purr-plex/static/css/main.3fd1c173.chunk.css",
+    "main.js": "/purr-plex/static/js/main.56d8ec2a.chunk.js",
+    "main.js.map": "/purr-plex/static/js/main.56d8ec2a.chunk.js.map",
     "runtime-main.js": "/purr-plex/static/js/runtime-main.d157491d.js",
     "runtime-main.js.map": "/purr-plex/static/js/runtime-main.d157491d.js.map",
-    "static/js/2.28be0fd8.chunk.js": "/purr-plex/static/js/2.28be0fd8.chunk.js",
-    "static/js/2.28be0fd8.chunk.js.map": "/purr-plex/static/js/2.28be0fd8.chunk.js.map",
+    "static/js/2.afabbe32.chunk.js": "/purr-plex/static/js/2.afabbe32.chunk.js",
+    "static/js/2.afabbe32.chunk.js.map": "/purr-plex/static/js/2.afabbe32.chunk.js.map",
     "index.html": "/purr-plex/index.html",
-    "precache-manifest.6925835e7a4da5277e551ec6073e8d2f.js": "/purr-plex/precache-manifest.6925835e7a4da5277e551ec6073e8d2f.js",
+    "precache-manifest.4b825412c40e82b0052de369d5d94f21.js": "/purr-plex/precache-manifest.4b825412c40e82b0052de369d5d94f21.js",
     "service-worker.js": "/purr-plex/service-worker.js",
-    "static/css/main.a8c07f21.chunk.css.map": "/purr-plex/static/css/main.a8c07f21.chunk.css.map",
-    "static/js/2.28be0fd8.chunk.js.LICENSE.txt": "/purr-plex/static/js/2.28be0fd8.chunk.js.LICENSE.txt"
+    "static/css/main.3fd1c173.chunk.css.map": "/purr-plex/static/css/main.3fd1c173.chunk.css.map",
+    "static/js/2.afabbe32.chunk.js.LICENSE.txt": "/purr-plex/static/js/2.afabbe32.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.d157491d.js",
-    "static/js/2.28be0fd8.chunk.js",
-    "static/css/main.a8c07f21.chunk.css",
-    "static/js/main.f30a2c21.chunk.js"
+    "static/js/2.afabbe32.chunk.js",
+    "static/css/main.3fd1c173.chunk.css",
+    "static/js/main.56d8ec2a.chunk.js"
   ]
 }
