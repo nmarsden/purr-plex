@@ -9,10 +9,12 @@ import {
   GridPos,
   pickRandomShape,
   PieceData,
+  Placeable,
   removeCompleted,
 } from './components/piece/Piece';
 import Score from './components/score/Score';
 import PointsMessage, { PointsMessageData } from './components/pointsMessage/PointsMessage';
+import NewGameButton from './components/newGameButton/NewGameButton';
 
 const initialShape = pickRandomShape();
 const initialPlacedPieces:PieceData[] = [];
@@ -20,12 +22,18 @@ const initialPlacedPieces:PieceData[] = [];
 // FOR TESTING (replace above code with this)
 // const initialShape = '3B_I_1';
 // const initialPlacedPieces:PieceData[] = [
-//   { gridX: 2, gridY: 1, shape: '2B_I_2' },
-//   { gridX: 2, gridY: 3, shape: '3B_I_2' },
-//   { gridX: 2, gridY: 6, shape: '3B_I_2' }
+//   { gridX: 2, gridY: 0, shape: '3B_I_2' },
+//   { gridX: 1, gridY: 3, shape: '3B_I_2' },
+//   { gridX: 2, gridY: 6, shape: '3B_I_2' },
+//   { gridX: 5, gridY: 0, shape: '3B_I_2' },
+//   { gridX: 4, gridY: 3, shape: '3B_I_2' },
+//   { gridX: 5, gridY: 6, shape: '3B_I_2' },
+//   { gridX: 8, gridY: 1, shape: '2B_I_2' },
+//   { gridX: 7, gridY: 3, shape: '3B_I_2' },
+//   { gridX: 8, gridY: 6, shape: '3B_I_2' }
 // ];
 
-let placeable:boolean[][] = calculatePlaceable(initialShape, initialPlacedPieces);
+let placeable:Placeable = calculatePlaceable(initialShape, initialPlacedPieces);
 
 function App() {
   const [placedPieces, setPlacedPieces] = useState<PieceData[]>(initialPlacedPieces);
@@ -36,15 +44,20 @@ function App() {
   const [previousScore, setPreviousScore] = useState<number>(0);
   const [score, setScore] = useState<number>(0);
   const [pointsMessageData, setPointsMessageData] = useState<PointsMessageData>({ isShown:false });
+  const [isGameOver, setIsGameOver] = useState<boolean>(false);
 
   const isPlaceable = (isInsideGrid:boolean, gridX:number, gridY:number): boolean => {
-    return isInsideGrid && placeable[gridX][gridY];
+    return isInsideGrid && placeable.gridFlags[gridX][gridY];
   };
 
   const updateNextShape = (placedPieces:PieceData[]) => {
     const shape = pickRandomShape();
     setNextShape(shape);
     placeable = calculatePlaceable(shape, placedPieces);
+  };
+
+  const isGameFinished = ():boolean => {
+    return !placeable.isAnyPos;
   };
 
   const updatePlacedPieces = (newPlacedPiece:PieceData, placedPieces:PieceData[], { completedGridPositions }:CalcCompletedResult) => {
@@ -118,9 +131,24 @@ function App() {
       updateCompletedBlocks(completed);
       updateScore(completed);
       updateNextShape(newPlacedPieces);
+      if (isGameFinished()) {
+        setIsGameOver(true);
+      }
     }
     setCompletableBlocks([]);
     setHoverPiece(null);
+  };
+
+  const initNewGame = () => {
+    setPlacedPieces([]);
+    updateNextShape([]);
+    setPreviousScore(0);
+    setScore(0);
+    setIsGameOver(false);
+  };
+
+  const onNewGameButtonClick = () => {
+    initNewGame();
   };
 
   return (
@@ -128,8 +156,9 @@ function App() {
       <div>
         <Score previousScore={previousScore} currentScore={score}/>
         <Grid placedPieces={placedPieces} hoverPiece={hoverPiece} completableBlocks={completableBlocks} completedBlocks={completedBlocks}/>
-        <DraggablePiece shape={nextShape} onDrag={onPieceDrag} onDragStop={onPieceDragStop}/>
+        <DraggablePiece shape={nextShape} onDrag={onPieceDrag} onDragStop={onPieceDragStop} isDisabled={isGameOver}/>
         <PointsMessage pointsMessageData={pointsMessageData}/>
+        <NewGameButton isShown={isGameOver} onClick={onNewGameButtonClick}/>
       </div>
     </GameDimensionsProvider>
   );

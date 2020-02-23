@@ -172,9 +172,15 @@ export const shapeDimensions = (shape:string, blockSize:number) => {
   return { width, height };
 };
 
-export const calculatePlaceable = (shape:string, placedPieces:PieceData[]):boolean[][] => {
+export interface Placeable {
+  gridFlags:boolean[][],
+  isAnyPos:boolean
+}
+
+export const calculatePlaceable = (shape:string, placedPieces:PieceData[]):Placeable => {
   const occupied:boolean[][] = calculateOccupied(placedPieces);
-  let placeable:boolean[][] = initMultiDim(false);
+  let gridFlags:boolean[][] = initMultiDim(false);
+  let isAnyPos = false;
 
   for (let gridX=0; gridX<9; gridX++) {
     for (let gridY=0; gridY<9; gridY++) {
@@ -183,10 +189,13 @@ export const calculatePlaceable = (shape:string, placedPieces:PieceData[]):boole
       shapeToGridPositions(gridX, gridY, shape).forEach(gridPos => {
         isPlaceable = isPlaceable && gridPos.x < 9 && gridPos.y < 9 && !occupied[gridPos.x][gridPos.y];
       });
-      placeable[gridX][gridY] = isPlaceable;
+      gridFlags[gridX][gridY] = isPlaceable;
+      if (isPlaceable) {
+        isAnyPos = true;
+      }
     }
   }
-  return placeable;
+  return { gridFlags, isAnyPos };
 };
 
 export interface CalcCompletedResult {

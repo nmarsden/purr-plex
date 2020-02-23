@@ -1,0 +1,17 @@
+$button-bg-colour: #5bb8ff;
+$button-text-colour: #f0f2f5;
+
+.container {
+  position: absolute;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column-reverse;
+}
+
+.button {
+  background-color: $button-bg-colour;
+  text-align: center;
+  color: $button-text-colour;
+  cursor: pointer;
+}

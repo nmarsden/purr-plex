@@ -7,7 +7,7 @@ import Piece, { shapeDimensions } from '../piece/Piece';
 
 let cx = classNames.bind(styles);
 
-const DraggablePiece: FunctionComponent<any> = ({ shape, onDrag, onDragStop }) => {
+const DraggablePiece: FunctionComponent<any> = ({ shape, onDrag, onDragStop, isDisabled }) => {
   const gameDimensions = useGameDimensions();
   const shapeDims = shapeDimensions(shape, gameDimensions.cellSize);
   const smallShapeDims = shapeDimensions(shape, gameDimensions.cellSize / 2);
@@ -19,6 +19,10 @@ const DraggablePiece: FunctionComponent<any> = ({ shape, onDrag, onDragStop }) =
   const [isDragging, setIsDragging] = useState(false);
   const [position, setPosition] = useState(initialPosition);
   const dragStartYOffset = -(gameDimensions.cellSize * 2);
+
+  if (!isDragging && position.x !== initialPosition.x && position.y !== initialPosition.y) {
+    setPosition(initialPosition);
+  }
 
   let containerInlineStyles = {
     left: `${gameDimensions.draggableLeft - (shapeDims.width / 2)}px`,
@@ -63,9 +67,10 @@ const DraggablePiece: FunctionComponent<any> = ({ shape, onDrag, onDragStop }) =
       <Draggable position={position}
                  onStart={handleStart}
                  onDrag={handleDrag}
-                 onStop={handleStop}>
+                 onStop={handleStop}
+                 disabled={isDisabled}>
         <div className={pieceContainerClassName}>
-          <Piece x={0} y={0} shape={shape} isDraggable={true} isPreDragging={isPreDragging} isDragging={isDragging}/>
+          <Piece x={0} y={0} shape={shape} isDraggable={true} isPreDragging={isPreDragging} isDragging={isDragging} isMuted={isDisabled}/>
         </div>
       </Draggable>
     </div>
