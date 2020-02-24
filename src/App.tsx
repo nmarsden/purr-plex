@@ -15,6 +15,7 @@ import {
 import Score from './components/score/Score';
 import PointsMessage, { PointsMessageData } from './components/pointsMessage/PointsMessage';
 import NewGameButton from './components/newGameButton/NewGameButton';
+import HighScore from './components/highScore/HighScore';
 
 const initialShape = pickRandomShape();
 const initialPlacedPieces:PieceData[] = [];
@@ -45,6 +46,7 @@ function App() {
   const [score, setScore] = useState<number>(0);
   const [pointsMessageData, setPointsMessageData] = useState<PointsMessageData>({ isShown:false });
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
+  const [highScore, setHighScore] = useState<number>(0);
 
   const isPlaceable = (isInsideGrid:boolean, gridX:number, gridY:number): boolean => {
     return isInsideGrid && placeable.gridFlags[gridX][gridY];
@@ -104,7 +106,11 @@ function App() {
   const updateScore = ({ placedBlocksKeptCount, completedRegionCount, completedRegionCenter }:CalcCompletedResult) => {
     setPreviousScore(score);
     const points = calcPoints(placedBlocksKeptCount, completedRegionCount);
-    setScore(score + points);
+    const newScore = score + points;
+    setScore(newScore);
+    if (newScore > highScore) {
+      setHighScore(newScore);
+    }
     if (completedRegionCount > 0) {
       showPointsMessage(completedRegionCount, completedRegionCenter, points);
     }
@@ -155,6 +161,7 @@ function App() {
     <GameDimensionsProvider>
       <div>
         <Score previousScore={previousScore} currentScore={score}/>
+        <HighScore highScore={highScore}/>
         <Grid placedPieces={placedPieces} hoverPiece={hoverPiece} completableBlocks={completableBlocks} completedBlocks={completedBlocks}/>
         <DraggablePiece shape={nextShape} onDrag={onPieceDrag} onDragStop={onPieceDragStop} isDisabled={isGameOver}/>
         <PointsMessage pointsMessageData={pointsMessageData}/>

@@ -53,6 +53,8 @@ const GameDimensionsProvider: FunctionComponent<any> = ({ children }) => {
   const newGameButtonTop =  Math.floor( gridTop + gridSize + (cellSize * 3.6) );
 
   const gameDimensions = {
+    windowWidth: width,
+    windowHeight: height,
     cellSize,
     gridSize,
     gridLeft,
