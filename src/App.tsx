@@ -16,6 +16,9 @@ import Score from './components/score/Score';
 import PointsMessage, { PointsMessageData } from './components/pointsMessage/PointsMessage';
 import NewGameButton from './components/newGameButton/NewGameButton';
 import HighScore from './components/highScore/HighScore';
+import ThemeButton from './components/themeButton/ThemeButton';
+import ThemeModal from './components/themeModal/ThemeModal';
+import ThemeProvider from './components/themeProvider/ThemeProvider';
 
 const initialShape = pickRandomShape();
 const initialPlacedPieces:PieceData[] = [];
@@ -47,6 +50,7 @@ function App() {
   const [pointsMessageData, setPointsMessageData] = useState<PointsMessageData>({ isShown:false });
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [highScore, setHighScore] = useState<number>(0);
+  const [isThemeModalOpen, setIsThemeModalOpen] = useState<boolean>(false);
 
   const isPlaceable = (isInsideGrid:boolean, gridX:number, gridY:number): boolean => {
     return isInsideGrid && placeable.gridFlags[gridX][gridY];
@@ -157,9 +161,20 @@ function App() {
     initNewGame();
   };
 
+  const onThemeButtonClick = () => {
+    setIsThemeModalOpen(true);
+  };
+
+  const onThemeModalClose = () => {
+    setIsThemeModalOpen(false);
+  };
+
   return (
     <GameDimensionsProvider>
-      <div>
+      <ThemeProvider>
+        <div>
+        <ThemeButton onClick={onThemeButtonClick}/>
+        <ThemeModal isOpen={isThemeModalOpen} onClose={onThemeModalClose}/>
         <Score previousScore={previousScore} currentScore={score}/>
         <HighScore highScore={highScore}/>
         <Grid placedPieces={placedPieces} hoverPiece={hoverPiece} completableBlocks={completableBlocks} completedBlocks={completedBlocks}/>
@@ -167,6 +182,7 @@ function App() {
         <PointsMessage pointsMessageData={pointsMessageData}/>
         <NewGameButton isShown={isGameOver} onClick={onNewGameButtonClick}/>
       </div>
+      </ThemeProvider>
     </GameDimensionsProvider>
   );
 }

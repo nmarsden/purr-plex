@@ -5,10 +5,13 @@ $block-completable-colour: #59a6eb;
 $block-border-soft-colour: #64d3ff;
 $block-border-hard-colour: #000000;
 
+$cat-colour: #4784bb;
+
 .block {
   position: absolute;
   background-color: $block-colour;
   border: thin solid $block-border-soft-colour;
+  fill: $cat-colour;
 }
 
 @mixin border-hard($top, $right, $bottom, $left) {

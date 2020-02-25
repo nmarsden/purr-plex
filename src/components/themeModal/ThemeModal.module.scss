@@ -1,0 +1,50 @@
+.modalBackdrop {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+.container {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: white;
+  z-index: 2;
+}
+
+.arrow {
+  bottom: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+  border-bottom-color: white;
+}
+
+.header {
+  text-align: center;
+}
+
+.body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttonPlain {
+  border: thin solid black;
+  background-color: #5bb8ff;
+}
+
+.buttonCat {
+  border: thin solid black;
+  background-color: #5bb8ff;
+  fill: #4784bb;
+}
