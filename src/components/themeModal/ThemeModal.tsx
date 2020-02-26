@@ -58,7 +58,7 @@ const ThemeModal: FunctionComponent<any> = ({ isOpen, onClose }:ThemeModalProps)
   const catInlineStyles = {
     width: `100%`,
     height: `100%`,
-    padding: `20%`
+    padding: `17%`
   };
 
   const chooseTheme = (chosenTheme: Theme) => {
