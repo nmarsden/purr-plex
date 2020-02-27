@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/purr-plex/static/css/main.95c5b864.chunk.css",
-    "main.js": "/purr-plex/static/js/main.8a1aa346.chunk.js",
-    "main.js.map": "/purr-plex/static/js/main.8a1aa346.chunk.js.map",
+    "main.js": "/purr-plex/static/js/main.fc53310d.chunk.js",
+    "main.js.map": "/purr-plex/static/js/main.fc53310d.chunk.js.map",
     "runtime-main.js": "/purr-plex/static/js/runtime-main.d157491d.js",
     "runtime-main.js.map": "/purr-plex/static/js/runtime-main.d157491d.js.map",
     "static/js/2.d815e907.chunk.js": "/purr-plex/static/js/2.d815e907.chunk.js",
     "static/js/2.d815e907.chunk.js.map": "/purr-plex/static/js/2.d815e907.chunk.js.map",
     "index.html": "/purr-plex/index.html",
-    "precache-manifest.42680fa52c5c00394b0825d79b328b4e.js": "/purr-plex/precache-manifest.42680fa52c5c00394b0825d79b328b4e.js",
+    "precache-manifest.f96763758e146b01d666393b15c415c8.js": "/purr-plex/precache-manifest.f96763758e146b01d666393b15c415c8.js",
     "service-worker.js": "/purr-plex/service-worker.js",
     "static/css/main.95c5b864.chunk.css.map": "/purr-plex/static/css/main.95c5b864.chunk.css.map",
     "static/js/2.d815e907.chunk.js.LICENSE.txt": "/purr-plex/static/js/2.d815e907.chunk.js.LICENSE.txt",
@@ -20,6 +20,6 @@
     "static/js/runtime-main.d157491d.js",
     "static/js/2.d815e907.chunk.js",
     "static/css/main.95c5b864.chunk.css",
-    "static/js/main.8a1aa346.chunk.js"
+    "static/js/main.fc53310d.chunk.js"
   ]
 }
