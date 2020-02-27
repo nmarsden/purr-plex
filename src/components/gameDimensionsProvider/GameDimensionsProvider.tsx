@@ -1,29 +1,7 @@
 import React, { createContext, FunctionComponent, useContext, useEffect, useState } from 'react'
+import useWindowDimensions from '../../hooks/useWindowDimensions/UseWindowDimensions';
 
 const GameDimensionsCtx = createContext<any>(null);
-
-function getWindowDimensions() {
-  const { clientWidth: width, clientHeight: height } = window.document.documentElement;
-  return {
-    width,
-    height
-  };
-}
-
-function useWindowDimensions() {
-  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
-
-  useEffect(() => {
-    function handleResize() {
-      setWindowDimensions(getWindowDimensions());
-    }
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  return windowDimensions;
-}
 
 const GameDimensionsProvider: FunctionComponent<any> = ({ children }) => {
   const { width, height } = useWindowDimensions();

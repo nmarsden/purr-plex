@@ -19,6 +19,7 @@ import HighScore from './components/highScore/HighScore';
 import ThemeButton from './components/themeButton/ThemeButton';
 import ThemeModal from './components/themeModal/ThemeModal';
 import ThemeProvider from './components/themeProvider/ThemeProvider';
+import useLocalStorage from './hooks/useLocalStorage/UseLocalStorage';
 
 const initialShape = pickRandomShape();
 const initialPlacedPieces:PieceData[] = [];
@@ -49,7 +50,7 @@ function App() {
   const [score, setScore] = useState<number>(0);
   const [pointsMessageData, setPointsMessageData] = useState<PointsMessageData>({ isShown:false });
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
-  const [highScore, setHighScore] = useState<number>(0);
+  const [highScore, setHighScore] = useLocalStorage('highScore', 0);
   const [isThemeModalOpen, setIsThemeModalOpen] = useState<boolean>(false);
 
   const isPlaceable = (isInsideGrid:boolean, gridX:number, gridY:number): boolean => {
