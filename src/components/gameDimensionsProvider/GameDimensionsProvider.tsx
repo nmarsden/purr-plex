@@ -1,4 +1,4 @@
-import React, { createContext, FunctionComponent, useContext, useEffect, useState } from 'react'
+import React, { createContext, FunctionComponent, useContext } from 'react'
 import useWindowDimensions from '../../hooks/useWindowDimensions/UseWindowDimensions';
 
 const GameDimensionsCtx = createContext<any>(null);
