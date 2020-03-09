@@ -1,4 +1,4 @@
-#Purr-plex Concept Map
+# Purr-plex Concept Map
 
 ![alt text](https://raw.githubusercontent.com/nmarsden/purr-plex/master/docs/conceptmap.png "Concept Map")
 
