@@ -13,13 +13,13 @@ const blockSize = 100;
 const cellSize = blockSize + padding;
 const cellsPerRow = 5;
 
-const toGridPos = ( idx ) => {
+const toGridPos = ( idx:number ) => {
   const gridX = padding + (Math.floor(idx % cellsPerRow) * cellSize);
   const gridY = padding + (Math.floor(idx / cellsPerRow) * cellSize);
   return { gridX, gridY };
 };
 
-const allBlocks = ( dynamicProps ) => (
+const allBlocks = ( dynamicProps:any ) => (
   <ThemeProvider>
     {blockTypes.map((blockType, idx) => {
       const { gridX, gridY } = toGridPos(idx);

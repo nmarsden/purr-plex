@@ -3,7 +3,7 @@ import styles from './Grid.module.scss';
 import { useGameDimensions } from '../gameDimensionsProvider/GameDimensionsProvider';
 import Piece, { PieceData } from '../piece/Piece';
 
-const Grid: FunctionComponent<any> = ({ placedPieces, hoverPiece, completableBlocks, completedBlocks }) => {
+const Grid: FunctionComponent<any> = ({ placedPieces = [], hoverPiece, completableBlocks = [], completedBlocks = [] }:any) => {
   const cellTypes = [
     'OOOXXXOOO',
     'OOOXXXOOO',

@@ -6,6 +6,36 @@ import Block from '../block/Block';
 
 type BlockType = '1a' | '1b' | '1c'| '1d' | '2a' | '2b' | '2c'| '2d'| '2e' | '2f' | '3a' | '3b' | '3c' | '3d' | '4a';
 
+export const shapeTypes = ['1B',
+  '2B_I_1',
+  '2B_I_2',
+  '3B_I_1',
+  '3B_I_2',
+  '3B_L_1',
+  '3B_L_2',
+  '3B_L_3',
+  '3B_L_4',
+  '4B_O',
+  '4B_L_1',
+  '4B_L_2',
+  '4B_L_3',
+  '4B_L_4',
+  '4B_J_1',
+  '4B_J_2',
+  '4B_J_3',
+  '4B_J_4',
+  '4B_Z_1',
+  '4B_Z_2',
+  '4B_S_1',
+  '4B_S_2',
+  '4B_T_1',
+  '4B_T_2',
+  '4B_T_3',
+  '4B_T_4',
+  '4B_I_1',
+  '4B_I_2'] as const;
+type ShapeType = typeof shapeTypes[number];
+
 interface BlockOffset {
   x: number,
   y: number
